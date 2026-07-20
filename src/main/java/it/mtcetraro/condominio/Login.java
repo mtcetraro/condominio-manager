@@ -3,6 +3,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import java.util.Scanner;
 
 public class Login {
     private String Utente;
@@ -25,6 +26,14 @@ public class Login {
     }
 
     public boolean execLogin(Connection connection){
+        System.out.println("Inserisci i dati di Login:\nNome Utente: ");
+        Scanner scanner = new Scanner(System.in);
+        String utente = scanner.nextLine();
+        System.out.println("\nPassword: ");
+        String password = scanner.nextLine();
+        this.setUtente(utente);
+        this.setPassword(password);
+        scanner.close();
         
         String query = "SELECT * FROM Utente WHERE NomeUtente=? AND Password=?";
         try(PreparedStatement pstmt = connection.prepareStatement(query);){
