@@ -11,15 +11,7 @@ public class Main{
         // Inseriamo Connessione, Statement e ResultSet nel try-with-resources
         // così Java chiuderà tutto automaticamente liberando la memoria nel DB
         try (Connection conn = DatabaseManager.getConnection()) {  
-            System.out.println("Inserisci i dati di Login:\nNome Utente: ");
             Login login = new Login();
-            Scanner scanner = new Scanner(System.in);
-            String utente = scanner.nextLine();
-            System.out.println("\nPassword: ");
-            String password = scanner.nextLine();
-            login.setUtente(utente);
-            login.setPassword(password);
-            scanner.close();
             boolean utente_loggato = login.execLogin(conn);
             if(utente_loggato){
                 System.out.println("Loggato");
