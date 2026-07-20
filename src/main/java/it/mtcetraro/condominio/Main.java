@@ -2,29 +2,27 @@ package it.mtcetraro.condominio;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.PreparedStatement;
+import java.util.Scanner;
 
 public class Main{
-    public static void main(){
+    public static void main(String[] args){
         System.out.println("Benvenuto su CondominioApp\nConnessione al database\n");
-        String query = "SELECT * FROM Utente";
-
         // Inseriamo Connessione, Statement e ResultSet nel try-with-resources
         // così Java chiuderà tutto automaticamente liberando la memoria nel DB
-        try (Connection conn = DatabaseManager.getConnection();
-             Statement stmt = conn.createStatement()) {
-
-            ResultSet rs = stmt.executeQuery(query);    
-            System.out.println("Dati presenti nel database:\n");
-
-            // Il metodo rs.next() sposta il cursore alla riga successiva. 
-            // Ritorna 'true' se c'è una riga, 'false' quando i dati sono finiti.
-            while (rs.next()) {
-                // Estraiamo i dati specificando il nome della colonna della tabella SQL
-                String Utente = rs.getString("NomeUtente");
-                String Password = rs.getString("Password");
-                // Stampiamo i record a video
-                System.out.println("NomeUtente: " + Utente + " | Password: " + Password);
+        try (Connection conn = DatabaseManager.getConnection()) {  
+            System.out.println("Inserisci i dati di Login:\nNome Utente: ");
+            Login login = new Login();
+            Scanner scanner = new Scanner(System.in);
+            String utente = scanner.nextLine();
+            System.out.println("\nPassword: ");
+            String password = scanner.nextLine();
+            login.setUtente(utente);
+            login.setPassword(password);
+            scanner.close();
+            boolean utente_loggato = login.execLogin(conn);
+            if(utente_loggato){
+                System.out.println("Loggato");
             }
 
         } catch (SQLException e) {
