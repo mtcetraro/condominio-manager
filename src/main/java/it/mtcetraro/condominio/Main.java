@@ -1,14 +1,24 @@
 package it.mtcetraro.condominio;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.PreparedStatement;
-import java.util.Scanner;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-public class Main{
+public class Main extends Application{
+    @Override
+    //il primarystage viene creato automaticamente da JFX ed è "IL PALCO" dove poi verranno mostrate le pagine, che sono messe come "SCENE"
+    public void start(Stage primaryStage){
+        System.out.println("Avvio di CondominioManager...");
+        LoginView loginView = new LoginView();
+
+        //Qui creiamo la SCENA e gli impostiamo la pagina che vogliamo
+        Scene scene = new Scene(loginView, 450, 500);
+        primaryStage.setTitle("Condominio-Manager Login");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
     public static void main(String[] args){
-        System.out.println("Benvenuto su CondominioApp\nConnessione al database\n");
-        Home home = new Home();
-        home.Accesso();
+        //Nelle app JFX il metodo launch(args) inizializza il motore grafico e chiama automaticamente il metodo start()
+        launch(args);
     }
 }
