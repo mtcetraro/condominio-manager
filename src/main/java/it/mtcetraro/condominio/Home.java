@@ -5,18 +5,16 @@ import java.sql.SQLException;
 
 public class Home {
     
-    public void Accesso(){
+    public boolean Accesso(String Username, String Password){
         try (Connection conn = DatabaseManager.getConnection()) {  
             Login login = new Login();
-            boolean utente_loggato = login.execLogin(conn);
-            if(utente_loggato){
-                System.out.println("Loggato");
-                login.showCondomini(conn);
-            }
+            boolean utente_loggato = login.execLogin(conn, Username, Password);
+            return utente_loggato;
 
         } catch (SQLException e) {
             System.err.println("Errore durante la lettura dal database:");
             e.printStackTrace();
+            return false;
         }
     }
 

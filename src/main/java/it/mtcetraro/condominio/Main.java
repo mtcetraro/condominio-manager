@@ -8,11 +8,11 @@ public class Main extends Application{
     //il primarystage viene creato automaticamente da JFX ed è "IL PALCO" dove poi verranno mostrate le pagine, che sono messe come "SCENE"
     public void start(Stage primaryStage){
         System.out.println("Avvio di CondominioManager...");
-        LoginView loginView = new LoginView();
+        LoginView loginView = new LoginView(primaryStage);
 
         //Qui creiamo la SCENA e gli impostiamo la pagina che vogliamo
         Scene scene = new Scene(loginView, 450, 500);
-        primaryStage.setTitle("Condominio-Manager Login");
+        primaryStage.setTitle("Condominio-Manager");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

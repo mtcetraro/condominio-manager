@@ -26,15 +26,9 @@ public class Login {
         return this.Password;
     }
 
-    public boolean execLogin(Connection connection){
-        System.out.println("Inserisci i dati di Login:\nNome Utente: ");
-        Scanner scanner = new Scanner(System.in);
-        String utente = scanner.nextLine();
-        System.out.println("\nPassword: ");
-        String password = scanner.nextLine();
+    public boolean execLogin(Connection connection, String utente, String password){
         this.setUtente(utente);
         this.setPassword(password);
-        scanner.close();
         
         String query = "SELECT * FROM Utente WHERE NomeUtente=? AND Password=?";
         try(PreparedStatement pstmt = connection.prepareStatement(query);){
