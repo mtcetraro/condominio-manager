@@ -7,19 +7,22 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.TextField;  
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
 
 public class LoginView extends VBox {
 
     private TextField userField;
     private PasswordField passField;
     private Button loginButton;
+    private Button registerButton;
 
-    public LoginView() {
+    public LoginView(Stage stage) {
         // 1. Configurazione del contenitore esterno (VBox) per centrare il form
         this.setAlignment(Pos.CENTER);
         this.setPadding(new Insets(40));
@@ -100,11 +103,41 @@ public class LoginView extends VBox {
 
         grid.add(loginButton, 0, 6, 2, 1);
 
-        // 7. Gestione Evento del Click sul Pulsante
+        //7. Pulsante di Registrazione
+        Label registerText = new Label("Non hai ancora un account:");
+        registerText.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155");
+
+        registerButton = new Button("Registrati");
+        registerButton.setPrefWidth(90);
+        registerButton.setDefaultButton(true);
+        registerButton.setStyle("-fx-background-color: #ffffff; -fx-text-fill: #000000; -fx-font-weight: bold");
+
+        registerButton.setOnMouseEntered(e -> registerButton.setStyle(
+            "-fx-background-color: #1d4ed8; -fx-text-fill: #ffffff; -fx-font-weight: bold;"
+        ));
+        registerButton.setOnMouseExited(e -> registerButton.setStyle(
+            "-fx-background-color: #ffffff; -fx-text-fill: #000000; -fx-font-weight: bold"
+        ));
+
+        grid.add(registerText, 0, 7, 1, 1);
+        grid.add(registerButton, 1, 7, 1, 1);
+
+        // 8. Gestione Evento del Click sul Pulsante
         loginButton.setOnAction(e -> gestisciLogin());
+
+        registerButton.setOnAction(e -> showRegister(stage));
 
         // Inseriamo la griglia all'interno del VBox
         this.getChildren().add(grid);
+    }
+
+
+    private void showRegister(Stage stage){
+        RegisterView registerView = new RegisterView();
+        Scene scene = new Scene(registerView, 450, 500);
+        stage.setScene(scene);
+        stage.show();
+
     }
 
     private void gestisciLogin() {
@@ -116,16 +149,17 @@ public class LoginView extends VBox {
             return;
         }
 
-        // =========================================================
-        // RICHIAMA QUI IL TUO METODO DEL CORE JAVA PER IL LOGIN!
-        // Esempio:
-        // boolean autenticato = authService.login(username, password);
-        // =========================================================
+        Home home = new Home();
+        boolean logged = home.Accesso(username, password);
 
         System.out.println("Tentativo di accesso con username: " + username);
 
         // Simula login riuscito
-        mostraMessaggio(AlertType.INFORMATION, "Login Effettuato", "Benvenuto nel gestionale, " + username + "!");
+        if(logged){
+            mostraMessaggio(AlertType.INFORMATION, "Login Effettuato", "Benvenuto nel gestionale, " + username + "!");
+        }else{
+            mostraMessaggio(AlertType.ERROR, "Accesso non consentito", "I dati inseriti non sono presenti nel database!");
+        }
     }
 
     private void mostraMessaggio(AlertType tipo, String titolo, String messaggio) {
