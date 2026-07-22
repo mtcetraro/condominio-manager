@@ -133,7 +133,7 @@ public class LoginView extends VBox {
 
 
     private void showRegister(Stage stage){
-        RegisterView registerView = new RegisterView();
+        RegisterView registerView = new RegisterView(stage);
         Scene scene = new Scene(registerView, 450, 500);
         stage.setScene(scene);
         stage.show();
