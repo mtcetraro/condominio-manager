@@ -119,11 +119,22 @@ public class RegisterView extends VBox{
     private void registraUtente(){
         String user = username.getText().trim();
         String pass = password.getText();
+        Home home = new Home();
+        boolean registrazione_effettuata = home.Registrazione(user, pass);
 
         if(user.isEmpty() || pass.isEmpty()){
-            
+            mostraMessaggio(AlertType.ERROR, "Registrazione non riuscita", "Compila tutti i campi dati!");
+        }
+        if(registrazione_effettuata){
+            mostraMessaggio(AlertType.CONFIRMATION, "Registrazione effettuata", "Registrazione effettuata: per accedere al tuo account puoi ora effettuare il login");
         }
 
-        //Dobbiamo creare la classe Register che prende in input le stringhe e fa la query e ci ritorna un booleano
+    }
+
+    private void mostraMessaggio(AlertType tipo, String titolo, String messaggio){
+        Alert alert = new Alert(tipo);
+        alert.setTitle(titolo);
+        alert.setContentText(messaggio);
+        alert.showAndWait();
     }
 }
