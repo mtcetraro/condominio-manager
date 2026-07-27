@@ -123,7 +123,7 @@ public class LoginView extends VBox {
         grid.add(registerButton, 1, 7, 1, 1);
 
         // 8. Gestione Evento del Click sul Pulsante
-        loginButton.setOnAction(e -> gestisciLogin());
+        loginButton.setOnAction(e -> gestisciLogin(stage));
 
         registerButton.setOnAction(e -> showRegister(stage));
 
@@ -140,7 +140,7 @@ public class LoginView extends VBox {
 
     }
 
-    private void gestisciLogin() {
+    private void gestisciLogin(Stage stage) {
         String username = userField.getText().trim();
         String password = passField.getText();
 
@@ -152,11 +152,14 @@ public class LoginView extends VBox {
         Home home = new Home();
         boolean logged = home.Accesso(username, password);
 
-        System.out.println("Tentativo di accesso con username: " + username);
 
         // Simula login riuscito
         if(logged){
             mostraMessaggio(AlertType.INFORMATION, "Login Effettuato", "Benvenuto nel gestionale, " + username + "!");
+            CondominiView CondominioView = new CondominiView(stage, username);
+            Scene scene = new Scene(CondominioView, 450, 500);
+            stage.setScene(scene);
+            stage.show();
         }else{
             mostraMessaggio(AlertType.ERROR, "Accesso non consentito", "I dati inseriti non sono presenti nel database!");
         }

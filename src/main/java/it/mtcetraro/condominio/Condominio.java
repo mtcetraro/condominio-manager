@@ -6,13 +6,18 @@ public class Condominio{
     //attributi
     private String nome;
     private String luogo;
-    private List<Appartamento> appartamenti;
+    private String amministratore;
 
+    public Condominio(){
+        this.nome = null;
+        this.luogo = null;
+        this.amministratore = null;
+    }
 
-    public Condominio(String nome, String luogo){
+    public Condominio(String nome, String luogo, String amministratore){
         this.nome = nome;
         this.luogo = luogo;
-        this.appartamenti = new ArrayList<>();
+        this.amministratore = amministratore;
     }
 
     public void setNome(String nome){
@@ -23,16 +28,8 @@ public class Condominio{
         this.luogo = luogo;
     }
 
-    public void aggiungiAppartamento(Appartamento appartamento){
-        this.appartamenti.add(appartamento);
-    }
-
-    public int getNumAppartamenti(){
-        return this.appartamenti.size();
-    }
-
-    public List<Appartamento> getAppartamenti(){
-        return this.appartamenti;
+    public void setAmministratore(String amministratore){
+        this.amministratore = amministratore;
     }
 
     public String getNome(){
@@ -42,4 +39,15 @@ public class Condominio{
     public String getLuogo(){
         return this.luogo;
     }
+
+    public String getAmministratore(){
+        return this.amministratore;
+    }
+
+    @Override
+    public String toString() {
+        // Ritorna il testo che vuoi vedere visivamente nella ListView
+        return this.nome + " - " + this.luogo + " - " + this.amministratore; 
+    }
+
 }

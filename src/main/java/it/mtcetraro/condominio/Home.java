@@ -2,6 +2,7 @@ package it.mtcetraro.condominio;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 public class Home {
     
@@ -31,5 +32,14 @@ public class Home {
         }
     }
 
-
+    public List<Condominio> mostraCondomino(String Username){
+        try(Connection conn = DatabaseManager.getConnection()){
+            Login login = new Login();
+            List<Condominio> Condomini = login.showCondomini(conn, Username);
+            return Condomini;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
