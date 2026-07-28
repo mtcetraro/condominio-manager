@@ -42,4 +42,14 @@ public class Home {
             return null;
         }
     }
+    
+    public boolean InserimentoCondominio(Condominio condominio){
+        try(Connection conn = DatabaseManager.getConnection()){
+            boolean condominio_inserito = condominio.submission(conn);
+            return condominio_inserito;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
