@@ -64,7 +64,7 @@ public class DashboardView extends BorderPane{
         logo.setStyle("-fx-text-fill: #ffffff; -fx-font-size: 20px; -fx-font-weight: bold;");
 
         Label menu = new Label("MENU:");
-        menu.setStyle("-fx-text-fill: #f4da68; -fx-font-size: 15px; -fx-font-weight: bold;");
+        menu.setStyle("-fx-text-fill: #f4da68; -fx-font-size: 15px; -fx-font-weight: bold;"); //
         sidebar.setMargin(menu, new Insets(30, 0, 15, 0));
 
         sidebar.getChildren().addAll(logo, menu);
