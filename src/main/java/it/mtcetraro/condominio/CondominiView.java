@@ -79,7 +79,7 @@ public class CondominiView extends VBox {
                     mostraMessaggio(AlertType.ERROR, "Errore di selezione", "Stai selezionando una riga vuota. Seleziona uno dei tuoi condomini!");
                 }else{
                     DashboardView dashboard = new DashboardView(stage, condominio_selezionato);
-                    Scene scene = new Scene(dashboard, 1000, 1100);
+                    Scene scene = new Scene(dashboard, 1300, 800);
                     stage.setScene(scene);
                     stage.show();
                 }
