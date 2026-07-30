@@ -10,6 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.MouseButton;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -70,6 +71,21 @@ public class CondominiView extends VBox {
 
         caricaCondomini(Username);
 
+        listviewcondominio.setOnMouseClicked(e -> {
+            if(e.getClickCount() == 2 && e.getButton()==MouseButton.PRIMARY){
+                Condominio condominio_selezionato = listviewcondominio.getSelectionModel().getSelectedItem();
+
+                if(condominio_selezionato == null){
+                    mostraMessaggio(AlertType.ERROR, "Errore di selezione", "Stai selezionando una riga vuota. Seleziona uno dei tuoi condomini!");
+                }else{
+                    DashboardView dashboard = new DashboardView(stage, condominio_selezionato);
+                    Scene scene = new Scene(dashboard, 1000, 1100);
+                    stage.setScene(scene);
+                    stage.show();
+                }
+            }
+        });
+
         this.getChildren().addAll(grid, listviewcondominio);
     }
 
@@ -85,5 +101,12 @@ public class CondominiView extends VBox {
         Scene scene = new Scene(inserimentoCondominioView, 450, 500);
         stage.setScene(scene);
         stage.show();
+    }
+
+    private void mostraMessaggio(AlertType type, String titolo, String messaggio){
+        Alert alert = new Alert(type);
+        alert.setTitle(titolo);
+        alert.setContentText(messaggio);
+        alert.showAndWait();
     }
 }
