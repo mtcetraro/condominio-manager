@@ -1,5 +1,8 @@
 package it.mtcetraro.condominio;
 import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Condominio{
@@ -42,6 +45,24 @@ public class Condominio{
 
     public String getAmministratore(){
         return this.amministratore;
+    }
+
+    public boolean submission(Connection conn){
+        String query = "INSERT INTO CONDOMINIO(NomeCondominio, Indirizzo, Amministratore) VALUES (?,?,?)";
+        try(PreparedStatement psmt = conn.prepareStatement(query)){
+            psmt.setString(1, this.nome);
+            psmt.setString(2, this.luogo);
+            psmt.setString(3, this.amministratore);
+            int rows = psmt.executeUpdate();
+            if(rows==1){
+                return true;
+            }else{
+                return false;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

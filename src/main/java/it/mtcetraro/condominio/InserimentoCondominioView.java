@@ -83,9 +83,46 @@ public class InserimentoCondominioView extends VBox{
         grid.add(inviaCondominio, 1, 5, 1, 1);
         grid.setHalignment(inviaCondominio, HPos.RIGHT);
         
+        inviaCondominio.setOnAction(e -> sendCondominio(Username, stage));
+        back.setOnAction(e -> backToCondomini(stage, Username));
 
 
         this.getChildren().add(grid);
 
     }
+
+    private void sendCondominio(String amministratore, Stage stage){
+        String nomeCondom = nomeCondominio.getText();
+        String indirizzoCondom = indirizzoCondominio.getText();
+        Home home = new Home();
+
+        Condominio condominio = new Condominio(nomeCondom, indirizzoCondom, amministratore);
+        boolean inserimento = home.InserimentoCondominio(condominio);
+
+        if(nomeCondom.isEmpty() || indirizzoCondom.isEmpty()){
+            mostraMessaggio(AlertType.ERROR, "Riempi tutti i campi dati", "Non stai fornendo tutte le informazioni richieste!");
+        }else if(inserimento){
+            mostraMessaggio(AlertType.CONFIRMATION, "Inserimento riuscito", "Il tuo nuovo condominio è stato registrato!");
+            CondominiView condominioView = new CondominiView(stage, amministratore);
+            Scene scene = new Scene(condominioView, 450, 500);
+            stage.setScene(scene);
+            stage.show();
+        }
+    }
+
+    private void mostraMessaggio(AlertType tipo, String titolo, String messaggio) {
+        Alert alert = new Alert(tipo);
+        alert.setTitle(titolo);
+        alert.setHeaderText(null);
+        alert.setContentText(messaggio);
+        alert.showAndWait();
+    }
+
+    private void backToCondomini(Stage stage, String username){
+        CondominiView condominioView = new CondominiView(stage, username);
+        Scene scene = new Scene(condominioView, 450, 500);
+        stage.setScene(scene);
+        stage.show();
+    }
+
 }
