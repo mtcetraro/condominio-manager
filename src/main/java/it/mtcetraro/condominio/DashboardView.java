@@ -27,6 +27,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.scene.Node;
 
 public class DashboardView extends BorderPane{
     private VBox sidebar;
@@ -37,11 +38,10 @@ public class DashboardView extends BorderPane{
 
         
 
-        StackPane areaContenuto = new StackPane();
-        areaContenuto.setPadding(new Insets(20));
+        areaContenuto = new StackPane();
         areaContenuto.setMaxWidth(Double.MAX_VALUE);
-        areaContenuto.setMinWidth(Double.MAX_VALUE);
-        areaContenuto.setStyle("-fx-background-color: #1a87db; -fx-background-radius: 6px");
+        areaContenuto.setMaxHeight(Double.MAX_VALUE);
+        areaContenuto.setAlignment(Pos.TOP_LEFT);
 
         sidebar = this.createSidebar(condominio);
 
@@ -57,14 +57,14 @@ public class DashboardView extends BorderPane{
         sidebar.setPrefWidth(220);
         sidebar.setMinWidth(220);
         sidebar.setMaxWidth(220);
-        sidebar.setStyle("-fx-background-color: #4a4a4a;  -fx-background-radius: 6px");
+        sidebar.setStyle("-fx-background-color: #4a4a4a;  -fx-background-radius: 6px;");
 
         String nomeLogo = condominio.getNome();
         Label logo = new Label(nomeLogo);
         logo.setStyle("-fx-text-fill: #ffffff; -fx-font-size: 20px; -fx-font-weight: bold;");
 
         Label menu = new Label("MENU:");
-        menu.setStyle("-fx-text-fill: #f4da68; -fx-font-size: 15px; -fx-font-weight: bold;"); //
+        menu.setStyle("-fx-text-fill: #f4da68; -fx-font-size: 15px; -fx-font-weight: bold;"); 
         sidebar.setMargin(menu, new Insets(30, 0, 15, 0));
 
         sidebar.getChildren().addAll(logo, menu);
@@ -96,6 +96,7 @@ public class DashboardView extends BorderPane{
         view.setAlignment(Pos.CENTER_LEFT);
         view.setOnMouseExited(e -> view.setStyle("-fx-font-size:13; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-color: #675c2a; -fx-text-fill: #ffffff"));
         view.setOnMouseEntered(e -> view.setStyle("-fx-font-size:13; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-color: #f4da68; -fx-text-fill: #ffffff"));
+        view.setOnAction(e -> mostraContenuto(contenutoView()));
 
         Button costo = new Button("Spesa");
         costo.setStyle( "-fx-font-size:13; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-color: #675c2a; -fx-text-fill: #ffffff");
@@ -114,5 +115,58 @@ public class DashboardView extends BorderPane{
         sidebar.getChildren().add(menuBar);
 
         return sidebar;
+    }
+
+    private void mostraContenuto(Node nuovoContenuto){
+        areaContenuto.getChildren().clear();
+
+        areaContenuto.getChildren().add(nuovoContenuto);
+    }
+
+    private Node contenutoView(){
+        VBox contenuto = new VBox();
+        contenuto.setStyle("-fx-background-color: #bdbcbc; -fx-background-radius: 6px");
+        contenuto.setPrefWidth(900);
+        contenuto.setMinWidth(900);
+        contenuto.setMaxWidth(900);
+        contenuto.setPadding(new Insets(100, 0, 0, 100));
+
+        GridPane grid = new GridPane();
+        grid.setVgap(30);
+
+        Label title = new Label("Appartamenti del condominio:");
+
+
+        ObservableList<Appartamento> lista_appartamenti_obs = FXCollections.observableArrayList();
+        ListView<Appartamento> lista_appartamenti = new ListView<>(lista_appartamenti_obs);
+        lista_appartamenti.setPrefSize(600, 500);
+        lista_appartamenti.setMaxWidth(600);
+        lista_appartamenti_obs.add(null);
+
+        lista_appartamenti.setOnMouseClicked(e ->{
+            if(e.getClickCount()==2 && e.getButton()==MouseButton.PRIMARY){
+                Appartamento appartamento_selezionato = lista_appartamenti.getSelectionModel().getSelectedItem();
+                if(appartamento_selezionato == null){
+                    mostraMessaggio(AlertType.ERROR, "Appartamento inesistente", "Seleziona un appartamento presente nella lista!");
+                }else{
+                    
+                }
+            }
+        });
+
+        grid.add(title, 0, 0, 2, 1);
+        grid.add(lista_appartamenti, 0, 1, 2, 1);
+
+        contenuto.getChildren().add(grid);
+
+
+        return contenuto;
+    }
+
+    private void mostraMessaggio(AlertType type, String titolo, String messaggio){
+        Alert alert = new Alert(type);
+        alert.setTitle(titolo);
+        alert.setContentText(messaggio);
+        alert.showAndWait();
     }
 }
