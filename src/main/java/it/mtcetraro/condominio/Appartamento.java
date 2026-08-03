@@ -2,48 +2,26 @@ package it.mtcetraro.condominio;
 
 public class Appartamento{
     //attributi
+    private String condominio;
+    private String interno;
+    private String subalterno;
+    private String foglio;
+    private String particella;
+    private int spesapersonale;
     private String proprietario;
-    private int numero_civico;
-    private int metri_quadri;
-    private Condominio condominio;
 
-    public Appartamento(String proprietario, int numero_civico, int metri_quadri, Condominio appartenenza){
-        this.proprietario = proprietario;
-        this.numero_civico = numero_civico;
-        this.metri_quadri = metri_quadri;
-        this.condominio = appartenenza;
-    }
-
-    public Condominio getCondominio(){
-        return this.condominio;
-    }
-
-    public String getProprietario(){
-        return this.proprietario;
-    }
-
-    public int getNumeroCivico(){
-        return this.numero_civico;
-    }
-
-    public int getMetriQuadri(){
-        return this.metri_quadri;
-    }
-
-    public void setProprietario(String proprietario){
-        this.proprietario = proprietario;
-    }
-
-    public void setNumeroCivico(int numero){
-        this.numero_civico = numero;
-    }
-
-    public void setMetriQuadri(int metri){
-        this.metri_quadri = metri;
-    }
-
-    public void setCondominio(Condominio condominio){
+    public Appartamento(String condominio, String interno, String subalterno, String foglio, String particella, int spesapersonale, String proprietario){
         this.condominio = condominio;
+        this.interno = interno;
+        this.subalterno = subalterno;
+        this.foglio = foglio;
+        this.particella = particella;
+        this.spesapersonale = spesapersonale;
+        this.proprietario = proprietario;
     }
 
+    @Override 
+    public String toString(){
+        return this.interno + " - " + this.proprietario;
+    }
 }

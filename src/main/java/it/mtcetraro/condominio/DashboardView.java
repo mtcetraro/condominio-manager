@@ -96,7 +96,7 @@ public class DashboardView extends BorderPane{
         view.setAlignment(Pos.CENTER_LEFT);
         view.setOnMouseExited(e -> view.setStyle("-fx-font-size:13; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-color: #675c2a; -fx-text-fill: #ffffff"));
         view.setOnMouseEntered(e -> view.setStyle("-fx-font-size:13; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-color: #f4da68; -fx-text-fill: #ffffff"));
-        view.setOnAction(e -> mostraContenuto(contenutoView()));
+        view.setOnAction(e -> mostraContenuto(contenutoView(condominio)));
 
         Button costo = new Button("Spesa");
         costo.setStyle( "-fx-font-size:13; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-color: #675c2a; -fx-text-fill: #ffffff");
@@ -123,7 +123,7 @@ public class DashboardView extends BorderPane{
         areaContenuto.getChildren().add(nuovoContenuto);
     }
 
-    private Node contenutoView(){
+    private Node contenutoView(Condominio condominio){
         VBox contenuto = new VBox();
         contenuto.setStyle("-fx-background-color: #bdbcbc; -fx-background-radius: 6px");
         contenuto.setPrefWidth(900);
@@ -135,13 +135,15 @@ public class DashboardView extends BorderPane{
         grid.setVgap(30);
 
         Label title = new Label("Appartamenti del condominio:");
-
+        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 20));
+        title.setStyle("-fx-text-fill: #1e293b;");
 
         ObservableList<Appartamento> lista_appartamenti_obs = FXCollections.observableArrayList();
         ListView<Appartamento> lista_appartamenti = new ListView<>(lista_appartamenti_obs);
         lista_appartamenti.setPrefSize(600, 500);
         lista_appartamenti.setMaxWidth(600);
-        lista_appartamenti_obs.add(null);
+        
+        caricaAppartamenti(condominio, lista_appartamenti_obs);
 
         lista_appartamenti.setOnMouseClicked(e ->{
             if(e.getClickCount()==2 && e.getButton()==MouseButton.PRIMARY){
@@ -149,7 +151,7 @@ public class DashboardView extends BorderPane{
                 if(appartamento_selezionato == null){
                     mostraMessaggio(AlertType.ERROR, "Appartamento inesistente", "Seleziona un appartamento presente nella lista!");
                 }else{
-                    
+                    //Implementazione della schermata di specifica appartamento
                 }
             }
         });
@@ -168,5 +170,12 @@ public class DashboardView extends BorderPane{
         alert.setTitle(titolo);
         alert.setContentText(messaggio);
         alert.showAndWait();
+    }
+
+    private void caricaAppartamenti(Condominio condominio, ObservableList<Appartamento> lista_appartamenti_obs){
+        Home home = new Home();
+        List<Appartamento> Appartamenti = home.showAppartamenti(condominio);
+        lista_appartamenti_obs.clear();
+        lista_appartamenti_obs.addAll(Appartamenti);
     }
 }

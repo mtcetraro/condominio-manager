@@ -52,4 +52,15 @@ public class Home {
             return false;
         }
     }
+
+    public List<Appartamento> showAppartamenti(Condominio condominio){
+        try(Connection conn = DatabaseManager.getConnection()){
+            List<Appartamento> Appartamenti = condominio.showAppart(conn);
+            return Appartamenti;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
+

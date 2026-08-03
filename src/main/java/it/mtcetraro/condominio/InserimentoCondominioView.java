@@ -19,7 +19,9 @@ import javafx.scene.Scene;
 
 public class InserimentoCondominioView extends VBox{
     private TextField nomeCondominio;
+    private TextField cfCondominio;
     private TextField indirizzoCondominio;
+    private TextField comuneCondominio;
     private Button inviaCondominio;
     private Button back;
     
@@ -55,6 +57,15 @@ public class InserimentoCondominioView extends VBox{
         grid.add(nome, 0, 1, 2, 1);
         grid.add(nomeCondominio, 0, 2, 2, 1);
 
+        Label cf = new Label("Codice Fiscale:");
+        cf.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155");
+        cfCondominio = new TextField();
+        cfCondominio.setPromptText("CF del condominio...");
+        cfCondominio.setPrefWidth(250);
+        cfCondominio.setStyle("\"-fx-padding: 8px; -fx-border-color: #cbd5e1; -fx-border-radius: 4px; -fx-background-radius: 4px;\"");
+
+        grid.add(cf, 0, 3, 2, 1);
+        grid.add(cfCondominio, 0, 4, 2, 1);
 
         Label address = new Label("Indirizzo:");
         address.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155");
@@ -63,8 +74,18 @@ public class InserimentoCondominioView extends VBox{
         indirizzoCondominio.setPrefWidth(250);
         indirizzoCondominio.setStyle("\"-fx-padding: 8px; -fx-border-color: #cbd5e1; -fx-border-radius: 4px; -fx-background-radius: 4px;\"");
 
-        grid.add(address, 0, 3, 2, 1);
-        grid.add(indirizzoCondominio, 0, 4, 2, 1);
+        grid.add(address, 0, 5, 2, 1);
+        grid.add(indirizzoCondominio, 0, 6, 2, 1);
+
+        Label comune = new Label("Comune:");
+        comune.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155");
+        comuneCondominio = new TextField();
+        comuneCondominio.setPromptText("Comune del condominio...");
+        comuneCondominio.setPrefWidth(250);
+        comuneCondominio.setStyle("\"-fx-padding: 8px; -fx-border-color: #cbd5e1; -fx-border-radius: 4px; -fx-background-radius: 4px;\"");
+
+        grid.add(comune, 0, 7, 2, 1);
+        grid.add(comuneCondominio, 0, 8, 2, 1);
 
         back = new Button("Indietro");
         back.setPrefWidth(80);
@@ -72,7 +93,7 @@ public class InserimentoCondominioView extends VBox{
         back.setOnMouseExited(e -> back.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold;"));
         back.setOnMouseEntered(e -> back.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-weight: bold;"));
 
-        grid.add(back, 0, 5, 1, 1);
+        grid.add(back, 0, 9, 1, 1);
 
         inviaCondominio = new Button("Invia");
         inviaCondominio.setPrefWidth(80);
@@ -80,7 +101,7 @@ public class InserimentoCondominioView extends VBox{
         inviaCondominio.setOnMouseExited(e -> inviaCondominio.setStyle("-fx-background-color: #1d4ed8; -fx-text-fill: #ffffff; -fx-font-weight: bold;"));
         inviaCondominio.setOnMouseEntered(e -> inviaCondominio.setStyle("-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold;"));
 
-        grid.add(inviaCondominio, 1, 5, 1, 1);
+        grid.add(inviaCondominio, 1, 9, 1, 1);
         grid.setHalignment(inviaCondominio, HPos.RIGHT);
         
         inviaCondominio.setOnAction(e -> sendCondominio(Username, stage));
@@ -93,13 +114,15 @@ public class InserimentoCondominioView extends VBox{
 
     private void sendCondominio(String amministratore, Stage stage){
         String nomeCondom = nomeCondominio.getText();
+        String codiceFiscaleCondominio = cfCondominio.getText();
         String indirizzoCondom = indirizzoCondominio.getText();
+        String comunedelcondominio = comuneCondominio.getText();
         Home home = new Home();
 
-        Condominio condominio = new Condominio(nomeCondom, indirizzoCondom, amministratore);
+        Condominio condominio = new Condominio(nomeCondom, codiceFiscaleCondominio, indirizzoCondom, comunedelcondominio, amministratore);
         boolean inserimento = home.InserimentoCondominio(condominio);
 
-        if(nomeCondom.isEmpty() || indirizzoCondom.isEmpty()){
+        if(nomeCondom.isEmpty() || indirizzoCondom.isEmpty() || codiceFiscaleCondominio.isEmpty() || comunedelcondominio.isEmpty()){
             mostraMessaggio(AlertType.ERROR, "Riempi tutti i campi dati", "Non stai fornendo tutte le informazioni richieste!");
         }else if(inserimento){
             mostraMessaggio(AlertType.CONFIRMATION, "Inserimento riuscito", "Il tuo nuovo condominio è stato registrato!");
