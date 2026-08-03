@@ -2,24 +2,32 @@ package it.mtcetraro.condominio;
 import java.util.List;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Condominio{
     //attributi
     private String nome;
-    private String luogo;
+    private String cf;
+    private String indirizzo;
+    private String comune;
     private String amministratore;
+
 
     public Condominio(){
         this.nome = null;
-        this.luogo = null;
+        this.cf = null;
+        this.indirizzo = null;
+        this.comune = null;
         this.amministratore = null;
     }
 
-    public Condominio(String nome, String luogo, String amministratore){
+    public Condominio(String nome, String Cf, String luogo, String comune, String amministratore){
         this.nome = nome;
-        this.luogo = luogo;
+        this.cf = Cf;
+        this.indirizzo = luogo;
+        this.comune = comune;
         this.amministratore = amministratore;
     }
 
@@ -28,7 +36,7 @@ public class Condominio{
     }
 
     public void setLuogo(String luogo){
-        this.luogo = luogo;
+        this.indirizzo = luogo;
     }
 
     public void setAmministratore(String amministratore){
@@ -40,7 +48,7 @@ public class Condominio{
     }
 
     public String getLuogo(){
-        return this.luogo;
+        return this.indirizzo;
     }
 
     public String getAmministratore(){
@@ -48,11 +56,13 @@ public class Condominio{
     }
 
     public boolean submission(Connection conn){
-        String query = "INSERT INTO CONDOMINIO(NomeCondominio, Indirizzo, Amministratore) VALUES (?,?,?)";
+        String query = "INSERT INTO CONDOMINIO(Nome, CF, Indirizzo, Comune, Amministratore) VALUES (?,?,?,?,?)";
         try(PreparedStatement psmt = conn.prepareStatement(query)){
             psmt.setString(1, this.nome);
-            psmt.setString(2, this.luogo);
-            psmt.setString(3, this.amministratore);
+            psmt.setString(2, this.cf);
+            psmt.setString(3, this.indirizzo);
+            psmt.setString(4, this.comune);
+            psmt.setString(5, this.amministratore);
             int rows = psmt.executeUpdate();
             if(rows==1){
                 return true;
@@ -65,10 +75,34 @@ public class Condominio{
         }
     }
 
+    public List<Appartamento> showAppart(Connection conn){
+        List<Appartamento> appartamenti = new ArrayList<>();
+        String query = "SELECT * FROM Appartamento WHERE Condominio = ?";
+        try(PreparedStatement pstmt = conn.prepareStatement(query)){
+            pstmt.setString(1, this.nome);
+            try(ResultSet rs = pstmt.executeQuery()){
+                while(rs.next()){
+                    String interno = rs.getString("Interno");
+                    String subalterno = rs.getString("Subalterno");
+                    String foglio = rs.getString("Foglio");
+                    String particella = rs.getString("Particella");
+                    int spesaPersonale = rs.getInt("SpesaPersonale");
+                    String Proprietario = rs.getString("Proprietario");
+                    Appartamento appartamento = new Appartamento(this.nome, interno, subalterno, foglio, particella, spesaPersonale, Proprietario);
+                    appartamenti.add(appartamento);
+                }
+                return appartamenti;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     @Override
     public String toString() {
         // Ritorna il testo che vuoi vedere visivamente nella ListView
-        return this.nome + " - " + this.luogo + " - " + this.amministratore; 
+        return this.nome + " - " + this.comune + " - " + this.amministratore; 
     }
 
 }

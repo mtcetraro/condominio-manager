@@ -48,7 +48,7 @@ public class Login {
     public List<Condominio> showCondomini(Connection connection, String amministratore){
         List<Condominio> CondominiTotal = new ArrayList<>();
         System.out.println("Questi sono i tuoi condomini:\n");
-        String query = "SELECT p.NomeCondominio, p.Indirizzo, p.Amministratore FROM Condominio p WHERE p.Amministratore = ?";
+        String query = "SELECT p.Nome, p.CF, p.Indirizzo, p.Comune, p.Amministratore FROM Condominio p WHERE p.Amministratore = ?";
         try(PreparedStatement pstmt = connection.prepareStatement(query)){
             pstmt.setString(1, amministratore);
             try(ResultSet rs = pstmt.executeQuery()){
@@ -59,20 +59,12 @@ public class Login {
                 }
                 System.out.println();
                 while(rs.next()){
-                    Condominio condom = new Condominio();
-                    for(int i = 1; i <= columnCounter; i++){
-                        Object value = rs.getObject(i);
-                        if(condom.getNome() == null){
-                            condom.setNome(value.toString());
-                            continue;
-                        }else if(condom.getLuogo() == null){
-                            condom.setLuogo(value.toString());
-                            continue;
-                        }else if(condom.getAmministratore() == null){
-                            condom.setAmministratore(value.toString());
-                            continue;
-                        }
-                    }
+                    String nome = rs.getString("Nome");
+                    String cf = rs.getString("CF");
+                    String indirizzo = rs.getString("Indirizzo");
+                    String comune = rs.getString("Comune");             // <-- Ora il Comune viene letto correttamente!
+                    String amm = rs.getString("Amministratore");
+                    Condominio condom = new Condominio(nome, cf, indirizzo, comune, amm);
                     CondominiTotal.add(condom);
                 }
                 return CondominiTotal;

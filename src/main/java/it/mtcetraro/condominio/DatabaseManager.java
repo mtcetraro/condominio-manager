@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 public class DatabaseManager {
     // Cambia le credenziali con quelle del tuo PostgreSQL locale
-    private static final String URL = "jdbc:postgresql://localhost:5432/condominio_test";
+    private static final String URL = "jdbc:postgresql://localhost:5432/condominio_test2";
     private static final String USER = "postgres"; 
     private static final String PASSWORD = "imieidb2026"; 
 
