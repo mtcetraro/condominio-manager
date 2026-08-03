@@ -156,13 +156,141 @@ public class DashboardView extends BorderPane{
             }
         });
 
-        grid.add(title, 0, 0, 2, 1);
+        Button aggiungi = new Button("Aggiungi");
+        aggiungi.setStyle("-fx-background-color: #1d4ed8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;");
+        aggiungi.setOnMouseClicked(e -> showInserimentoAppartamento(condominio));
+
+        grid.add(title, 0, 0, 1, 1);
+        grid.add(aggiungi, 1, 0, 1, 1);
+        grid.setHalignment(aggiungi, HPos.RIGHT);
         grid.add(lista_appartamenti, 0, 1, 2, 1);
 
         contenuto.getChildren().add(grid);
 
 
         return contenuto;
+    }
+
+    private void caricaAppartamenti(Condominio condominio, ObservableList<Appartamento> lista_appartamenti_obs){
+        Home home = new Home();
+        List<Appartamento> Appartamenti = home.showAppartamenti(condominio);
+        lista_appartamenti_obs.clear();
+        lista_appartamenti_obs.addAll(Appartamenti);
+    }
+
+    private void showInserimentoAppartamento(Condominio condominio){
+        VBox area = new VBox();
+        area.setStyle("-fx-background-color: #bdbcbc; -fx-background-radius: 6px");
+        area.setPrefWidth(900);
+        area.setMinWidth(900);
+        area.setMaxWidth(900);
+        area.setPadding(new Insets(100, 0, 0, 100));
+
+        GridPane grid = new GridPane();
+        grid.setVgap(15);
+
+        Label interno = new Label("Interno:");
+        interno.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155");
+        TextField intern = new TextField();
+        intern.setPromptText("Interno...");
+        intern.setPrefWidth(250);
+        intern.setStyle("\"-fx-padding: 8px; -fx-border-color: #cbd5e1; -fx-border-radius: 4px; -fx-background-radius: 4px;\"");
+
+        grid.add(interno, 0, 0, 1, 1);
+        grid.add(intern, 0, 1, 2, 1);
+
+        Label subalterno = new Label("Subalterno:");
+        subalterno.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155");
+        TextField subalt = new TextField();
+        subalt.setPromptText("Subalterno...");
+        subalt.setPrefWidth(250);
+        subalt.setStyle("-fx-padding: 8px; -fx-border-color: #cbd5e1; -fx-border-radius: 4px; -fx-background-radius: 4px;");
+
+        grid.add(subalterno, 0, 2, 1, 1);
+        grid.add(subalt, 0, 3, 2, 1);
+
+        Label foglio = new Label("Foglio:");
+        foglio.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155");
+        TextField fogl = new TextField();
+        fogl.setPromptText("Foglio...");
+        fogl.setPrefWidth(250);
+        fogl.setStyle("-fx-padding: 8px; -fx-border-color: #cbd5e1; -fx-border-radius: 4px; -fx-background-radius: 4px;");
+
+        grid.add(foglio, 0, 4, 1, 1);
+        grid.add(fogl, 0, 5, 2, 1);
+
+        Label particella = new Label("Particella:");
+        particella.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155");
+        TextField particel = new TextField();
+        particel.setPromptText("Particella...");
+        particel.setPrefWidth(250);
+        particel.setStyle("-fx-padding: 8px; -fx-border-color: #cbd5e1; -fx-border-radius: 4px; -fx-background-radius: 4px;");
+
+        grid.add(particella, 0, 6, 1, 1);
+        grid.add(particel, 0, 7, 2, 1);
+
+        Label spesapersonale = new Label("Spesa personale:");
+        spesapersonale.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155");
+        TextField spesa = new TextField();
+        spesa.setPromptText("Se nulla inserisci 0...");
+        spesa.setPrefWidth(250);
+        spesa.setStyle("-fx-padding: 8px; -fx-border-color: #cbd5e1; -fx-border-radius: 4px; -fx-background-radius: 4px;");
+
+        grid.add(spesapersonale, 0, 8, 1, 1);
+        grid.add(spesa, 0, 9, 2, 1);
+
+
+        Label proprietario = new Label("Proprietario:");
+        proprietario.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155");
+        TextField prop = new TextField();
+        prop.setPromptText("Proprietario...");
+        prop.setPrefWidth(250);
+        prop.setStyle("-fx-padding: 8px; -fx-border-color: #cbd5e1; -fx-border-radius: 4px; -fx-background-radius: 4px;");
+
+        grid.add(proprietario, 0, 10, 1, 1);
+        grid.add(prop, 0, 11, 2, 1);
+
+        Button back = new Button("Indietro");
+        back.setPrefWidth(90);
+        back.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold;");
+        back.setOnMouseExited(e -> back.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold;"));
+        back.setOnMouseEntered(e -> back.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-weight: bold;"));
+        back.setOnMouseClicked(e -> mostraContenuto(contenutoView(condominio)));
+
+        Button inviaAppartamento = new Button("Invia");
+        inviaAppartamento.setPrefWidth(90);
+        inviaAppartamento.setStyle("-fx-background-color: #1d4ed8; -fx-text-fill: #ffffff; -fx-font-weight: bold;");
+        inviaAppartamento.setOnMouseExited(e -> inviaAppartamento.setStyle("-fx-background-color: #1d4ed8; -fx-text-fill: #ffffff; -fx-font-weight: bold;"));
+        inviaAppartamento.setOnMouseEntered(e -> inviaAppartamento.setStyle("-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold;"));
+        inviaAppartamento.setOnMouseClicked(e -> {
+            String inter = intern.getText();
+            String sub = subalt.getText();
+            String fog = fogl.getText();
+            String part = particel.getText();
+            String spesPers = spesa.getText();
+            int numeroSpesa = Integer.parseInt(spesPers);
+            String pro = prop.getText();
+            String condom = condominio.getNome();
+
+            Appartamento appartamento = new Appartamento(condom, inter, sub, fog, part, numeroSpesa, pro);
+
+            Home home = new Home();
+            boolean inserimento_effettuato = home.appartamentoInserito(appartamento);
+            if(inserimento_effettuato){
+                mostraMessaggio(AlertType.CONFIRMATION, "Inserimento Effettuato", "L'appartamento è stato inserito con successo!");
+                mostraContenuto(contenutoView(condominio));
+            }else{
+                mostraMessaggio(AlertType.ERROR, "Inserimento Fallito", "L'inserimento dell'appartamento è fallito. Ricontrolla i dati inseriti!");
+            }
+        });
+
+        grid.add(back, 0, 12, 1, 1);
+        grid.add(inviaAppartamento, 1, 12, 1, 1);
+        grid.setHalignment(inviaAppartamento, HPos.RIGHT);
+
+        area.getChildren().add(grid);
+
+        mostraContenuto(area);
     }
 
     private void mostraMessaggio(AlertType type, String titolo, String messaggio){
@@ -172,10 +300,4 @@ public class DashboardView extends BorderPane{
         alert.showAndWait();
     }
 
-    private void caricaAppartamenti(Condominio condominio, ObservableList<Appartamento> lista_appartamenti_obs){
-        Home home = new Home();
-        List<Appartamento> Appartamenti = home.showAppartamenti(condominio);
-        lista_appartamenti_obs.clear();
-        lista_appartamenti_obs.addAll(Appartamenti);
-    }
 }

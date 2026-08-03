@@ -62,5 +62,15 @@ public class Home {
             return null;
         }
     }
+
+    public boolean appartamentoInserito(Appartamento appartamento){
+        try(Connection conn = DatabaseManager.getConnection()){
+            boolean inserimento = appartamento.inserisci(conn);
+            return inserimento;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
 
