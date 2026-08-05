@@ -99,6 +99,22 @@ public class Condominio{
         }
     }
 
+    public boolean rimozione(Connection conn){
+        String query = "DELETE FROM Condominio WHERE CF=?";
+        try(PreparedStatement pstmt = conn.prepareStatement(query)){
+            pstmt.setString(1, this.cf);
+            int rows = pstmt.executeUpdate();
+            if(rows==1){
+                return true;
+            }else{
+                return false;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     @Override
     public String toString() {
         // Ritorna il testo che vuoi vedere visivamente nella ListView

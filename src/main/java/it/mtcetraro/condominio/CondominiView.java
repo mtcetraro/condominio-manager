@@ -10,6 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -82,6 +83,18 @@ public class CondominiView extends VBox {
                     Scene scene = new Scene(dashboard, 1300, 800);
                     stage.setScene(scene);
                     stage.show();
+                }
+            }
+        });
+
+        listviewcondominio.setOnKeyPressed(e -> {
+            if(e.getCode() == KeyCode.D){
+                Condominio condominio_selezionato = listviewcondominio.getSelectionModel().getSelectedItem();
+                if(condominio_selezionato == null){
+                    mostraMessaggio(AlertType.ERROR, "Condominio inesistente", "Seleziona un condominio presente nella lista");
+                }else{
+                    Home home = new Home();
+                    boolean eliminato = home.condominioDelete(condominio_selezionato);
                 }
             }
         });

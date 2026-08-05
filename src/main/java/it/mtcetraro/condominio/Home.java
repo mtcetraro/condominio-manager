@@ -82,5 +82,15 @@ public class Home {
             return false;
         }
     }
+
+    public boolean condominioDelete(Condominio condominio){
+        try(Connection conn = DatabaseManager.getConnection()){
+            boolean condominio_rimosso = condominio.rimozione(conn);
+            return condominio_rimosso;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
 
