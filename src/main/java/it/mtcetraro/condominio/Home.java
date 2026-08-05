@@ -72,5 +72,15 @@ public class Home {
             return false;
         }
     }
+
+    public boolean deleteAppartamento(Appartamento appartamento){
+        try(Connection conn = DatabaseManager.getConnection()){
+            boolean delete = appartamento.delete(conn);
+            return delete;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
 

@@ -50,6 +50,23 @@ public class Appartamento{
         }
     }
 
+    public boolean delete(Connection conn){
+        String query = "DELETE FROM Appartamento WHERE interno = ? and Condominio = ?";
+        try(PreparedStatement pstmt = conn.prepareStatement(query)){
+            pstmt.setString(1, this.interno);
+            pstmt.setString(2, this.condominio);
+            int rows = pstmt.executeUpdate();
+            if(rows==1){
+                return true;
+            }else{
+                return false;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     @Override 
     public String toString(){
         return this.interno + " - " + this.proprietario;
