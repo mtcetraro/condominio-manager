@@ -10,6 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -156,6 +157,24 @@ public class DashboardView extends BorderPane{
             }
         });
 
+        lista_appartamenti.setOnKeyPressed(e ->{
+            if(e.getCode() == KeyCode.D){
+                Appartamento appartamento_selezionato = lista_appartamenti.getSelectionModel().getSelectedItem();
+                if(appartamento_selezionato == null){
+                    mostraMessaggio(AlertType.ERROR, "Rimozione fallita", "Si è verificato un errore nella rimozione. Verifica di aver selezionato un appartamento disponibile!");
+                }else{
+                    boolean rimozione = rimozioneAppartamento(appartamento_selezionato);
+                    if(rimozione){
+                        mostraMessaggio(AlertType.CONFIRMATION, "Appartamento rimosso", "L'appartamento da te selezionato è stato rimosso dalla lista degli appartamenti del condominio");
+                        mostraContenuto(contenutoView(condominio));
+                    }else{
+                        mostraMessaggio(AlertType.ERROR, "Rimozione fallita", "E' stato impossibile rimuovere l'appartamento selezionato!");
+                    }
+                }
+
+            }
+        });
+
         Button aggiungi = new Button("Aggiungi");
         aggiungi.setStyle("-fx-background-color: #1d4ed8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;");
         aggiungi.setOnMouseClicked(e -> showInserimentoAppartamento(condominio));
@@ -291,6 +310,11 @@ public class DashboardView extends BorderPane{
         area.getChildren().add(grid);
 
         mostraContenuto(area);
+    }
+
+    private boolean rimozioneAppartamento(Appartamento appartamento){
+        Home home = new Home();
+        return home.deleteAppartamento(appartamento);
     }
 
     private void mostraMessaggio(AlertType type, String titolo, String messaggio){
