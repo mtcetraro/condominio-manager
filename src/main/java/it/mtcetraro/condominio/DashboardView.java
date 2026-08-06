@@ -179,10 +179,18 @@ public class DashboardView extends BorderPane{
         aggiungi.setStyle("-fx-background-color: #1d4ed8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;");
         aggiungi.setOnMouseClicked(e -> showInserimentoAppartamento(condominio));
 
+        Button cambio = new Button("Proprietari");
+        cambio.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold;");
+        cambio.setOnMouseExited(e -> cambio.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold;"));
+        cambio.setOnMouseEntered(e -> cambio.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-weight: bold;"));
+
+
         grid.add(title, 0, 0, 1, 1);
         grid.add(aggiungi, 1, 0, 1, 1);
         grid.setHalignment(aggiungi, HPos.RIGHT);
         grid.add(lista_appartamenti, 0, 1, 2, 1);
+        grid.add(cambio, 1, 2, 1, 1);
+        grid.setHalignment(cambio, HPos.RIGHT);
 
         contenuto.getChildren().add(grid);
 
@@ -197,6 +205,7 @@ public class DashboardView extends BorderPane{
         lista_appartamenti_obs.addAll(Appartamenti);
     }
 
+
     private void showInserimentoAppartamento(Condominio condominio){
         VBox area = new VBox();
         area.setStyle("-fx-background-color: #bdbcbc; -fx-background-radius: 6px");
@@ -207,6 +216,75 @@ public class DashboardView extends BorderPane{
 
         GridPane grid = new GridPane();
         grid.setVgap(15);
+        
+        ColumnConstraints col0 = new ColumnConstraints();
+        ColumnConstraints col1 = new ColumnConstraints();
+        ColumnConstraints colspazio = new ColumnConstraints();
+        colspazio.setPrefWidth(50);
+        grid.getColumnConstraints().addAll(col0, col1, colspazio);
+        
+        Label proprietario = new Label("Codice Fiscale del proprietario:");
+        proprietario.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155");
+        TextField prop = new TextField();
+        prop.setPromptText("CF...");
+        prop.setPrefWidth(250);
+        prop.setStyle("-fx-padding: 8px; -fx-border-color: #cbd5e1; -fx-border-radius: 4px; -fx-background-radius: 4px;");
+
+        grid.add(proprietario, 3, 0, 1, 1);
+        grid.add(prop, 3, 1, 2, 1);
+
+        Label telefono = new Label("Numero telefonico:");
+        telefono.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155");
+        TextField telefon = new TextField();
+        telefon.setPromptText("Telefono...");
+        telefon.setPrefWidth(250);
+        telefon.setStyle("-fx-padding: 8px; -fx-border-color: #cbd5e1; -fx-border-radius: 4px; -fx-background-radius: 4px;");
+
+        grid.add(telefono, 3, 2, 1, 1);
+        grid.add(telefon, 3, 3, 2, 1);
+
+        Label email = new Label("Email:");
+        email.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155");
+        TextField mail = new TextField();
+        mail.setPromptText("Email...");
+        mail.setPrefWidth(250);
+        mail.setStyle("-fx-padding: 8px; -fx-border-color: #cbd5e1; -fx-border-radius: 4px; -fx-background-radius: 4px;");
+
+        grid.add(email, 3, 4, 1, 1);
+        grid.add(mail, 3, 5, 2, 1);
+
+        Label residenza = new Label("Residenza:");
+        residenza.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155");
+        TextField residenz = new TextField();
+        residenz.setPromptText("Residenza...");
+        residenz.setPrefWidth(250);
+        residenz.setStyle("-fx-padding: 8px; -fx-border-color: #cbd5e1; -fx-border-radius: 4px; -fx-background-radius: 4px;");
+
+        grid.add(residenza, 3, 6, 1, 1);
+        grid.add(residenz, 3, 7, 2, 1);
+
+        Label nome = new Label("Nome:");
+        nome.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155");
+        TextField nom = new TextField();
+        nom.setPromptText("Nome...");
+        nom.setPrefWidth(250);
+        nom.setStyle("-fx-padding: 8px; -fx-border-color: #cbd5e1; -fx-border-radius: 4px; -fx-background-radius: 4px;");
+
+        grid.add(nome, 3, 8, 1, 1);
+        grid.add(nom, 3, 9, 2, 1);
+
+        Label cognome = new Label("Cognome:");
+        cognome.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155");
+        TextField cognom = new TextField();
+        cognom.setPromptText("Cognome...");
+        cognom.setPrefWidth(250);
+        cognom.setStyle("-fx-padding: 8px; -fx-border-color: #cbd5e1; -fx-border-radius: 4px; -fx-background-radius: 4px;");
+
+        grid.add(cognome, 3, 10, 1, 1);
+        grid.add(cognom, 3, 11, 2, 1);
+
+        //PARTE A SINISTRA DEL FORM 
+
 
         Label interno = new Label("Interno:");
         interno.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155");
@@ -259,15 +337,6 @@ public class DashboardView extends BorderPane{
         grid.add(spesa, 0, 9, 2, 1);
 
 
-        Label proprietario = new Label("Proprietario:");
-        proprietario.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155");
-        TextField prop = new TextField();
-        prop.setPromptText("Proprietario...");
-        prop.setPrefWidth(250);
-        prop.setStyle("-fx-padding: 8px; -fx-border-color: #cbd5e1; -fx-border-radius: 4px; -fx-background-radius: 4px;");
-
-        grid.add(proprietario, 0, 10, 1, 1);
-        grid.add(prop, 0, 11, 2, 1);
 
         Button back = new Button("Indietro");
         back.setPrefWidth(90);
@@ -290,17 +359,29 @@ public class DashboardView extends BorderPane{
             int numeroSpesa = Integer.parseInt(spesPers);
             String pro = prop.getText();
             String condom = condominio.getNome();
+            String name = nom.getText();
+            String lastname = cognom.getText();
+            String phone = telefon.getText();
+            String posta = mail.getText();
+            String residence = residenz.getText();
 
+            Proprietario owner = new Proprietario(pro, name, lastname, phone, posta, residence);
             Appartamento appartamento = new Appartamento(condom, inter, sub, fog, part, numeroSpesa, pro);
 
             Home home = new Home();
-            boolean inserimento_effettuato = home.appartamentoInserito(appartamento);
-            if(inserimento_effettuato){
-                mostraMessaggio(AlertType.CONFIRMATION, "Inserimento Effettuato", "L'appartamento è stato inserito con successo!");
-                mostraContenuto(contenutoView(condominio));
-            }else{
+            boolean inserimento_proprietario_effettuato = home.inserimentoProp(owner);
+            if(inserimento_proprietario_effettuato){
+                boolean inserimento_effettuato = home.appartamentoInserito(appartamento);
+                if(inserimento_effettuato){
+                    mostraMessaggio(AlertType.CONFIRMATION, "Inserimento Effettuato", "L'appartamento è stato inserito con successo!");
+                    mostraContenuto(contenutoView(condominio));
+                }else{
                 mostraMessaggio(AlertType.ERROR, "Inserimento Fallito", "L'inserimento dell'appartamento è fallito. Ricontrolla i dati inseriti!");
+                }
+            }else{
+                mostraMessaggio(AlertType.ERROR, "Errore Proprietario", "Si è verificato un errore con l'inserimento del proprietario!");
             }
+
         });
 
         grid.add(back, 0, 12, 1, 1);
