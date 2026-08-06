@@ -63,6 +63,15 @@ public class Home {
         }
     }
 
+    public boolean inserimentoProp(Proprietario proprietario){
+        try(Connection conn = DatabaseManager.getConnection()){
+            return proprietario.inserimento(conn);
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean appartamentoInserito(Appartamento appartamento){
         try(Connection conn = DatabaseManager.getConnection()){
             boolean inserimento = appartamento.inserisci(conn);

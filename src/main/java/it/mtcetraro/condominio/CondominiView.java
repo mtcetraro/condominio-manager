@@ -95,6 +95,12 @@ public class CondominiView extends VBox {
                 }else{
                     Home home = new Home();
                     boolean eliminato = home.condominioDelete(condominio_selezionato);
+                    if(eliminato == false){
+                        mostraMessaggio(AlertType.ERROR, "Errore di eliminazione", "Non è stato possibile eliminare il condominio selezionato");
+                    }else{
+                        mostraMessaggio(AlertType.CONFIRMATION, "Condominio eliminato", "Il condominio selezionato è stato eliminato dalla tua dashboard");
+                        caricaCondomini(Username);
+                    }
                 }
             }
         });
