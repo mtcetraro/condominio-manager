@@ -63,6 +63,16 @@ public class Home {
         }
     }
 
+    public List<Proprietario> showProprietari(Condominio condominio){
+        try(Connection conn = DatabaseManager.getConnection()){
+            List<Proprietario> proprietari = condominio.showProp(conn);
+            return proprietari;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public boolean inserimentoProp(Proprietario proprietario){
         try(Connection conn = DatabaseManager.getConnection()){
             return proprietario.inserimento(conn);
