@@ -36,8 +36,7 @@ public class DashboardView extends BorderPane{
     
     public DashboardView(Stage stage, Condominio condominio){
         this.setPadding(new Insets(20));
-
-        
+     
 
         areaContenuto = new StackPane();
         areaContenuto.setMaxWidth(Double.MAX_VALUE);
@@ -152,7 +151,7 @@ public class DashboardView extends BorderPane{
                 if(appartamento_selezionato == null){
                     mostraMessaggio(AlertType.ERROR, "Appartamento inesistente", "Seleziona un appartamento presente nella lista!");
                 }else{
-                    //Implementazione della schermata di specifica appartamento
+                    mostraContenuto(showSpecificaAppartamento(appartamento_selezionato));
                 }
             }
         });
@@ -183,7 +182,29 @@ public class DashboardView extends BorderPane{
         cambio.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold;");
         cambio.setOnMouseExited(e -> cambio.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold;"));
         cambio.setOnMouseEntered(e -> cambio.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-weight: bold;"));
+        cambio.setOnMouseClicked(e -> {
+            ObservableList<Proprietario> lista_proprietari_obs = FXCollections.observableArrayList(); 
+            ListView<Proprietario> lista_proprietari = new ListView<>(lista_proprietari_obs);
+            lista_proprietari.setPrefSize(600, 500);
+            lista_proprietari.setMaxWidth(600);
+            caricaProprietari(condominio, lista_proprietari_obs);
 
+            grid.getChildren().remove(lista_appartamenti);
+            grid.add(lista_proprietari,  0, 1, 2, 1);
+            title.setText("Proprietari nel condominio:");
+
+
+
+        });
+
+        Button cambio_appartamenti = new Button("Appartamenti");
+        cambio_appartamenti.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold;");
+        cambio_appartamenti.setOnMouseExited(e -> cambio_appartamenti.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold;"));
+        cambio_appartamenti.setOnMouseEntered(e -> cambio_appartamenti.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-weight: bold;"));
+        cambio_appartamenti.setOnMouseClicked(e -> mostraContenuto(contenutoView(condominio)));
+
+        grid.add(cambio_appartamenti, 0, 2, 1, 1);
+        grid.setHalignment(cambio_appartamenti, HPos.LEFT);
 
         grid.add(title, 0, 0, 1, 1);
         grid.add(aggiungi, 1, 0, 1, 1);
@@ -198,6 +219,14 @@ public class DashboardView extends BorderPane{
         return contenuto;
     }
 
+
+    private void caricaProprietari(Condominio condominio, ObservableList<Proprietario> lista_propretari_obs){
+        Home home = new Home();
+        List<Proprietario> proprietari = home.showProprietari(condominio);
+        lista_propretari_obs.clear();
+        lista_propretari_obs.addAll(proprietari);
+    }
+
     private void caricaAppartamenti(Condominio condominio, ObservableList<Appartamento> lista_appartamenti_obs){
         Home home = new Home();
         List<Appartamento> Appartamenti = home.showAppartamenti(condominio);
@@ -205,6 +234,17 @@ public class DashboardView extends BorderPane{
         lista_appartamenti_obs.addAll(Appartamenti);
     }
 
+
+    private Node showSpecificaAppartamento(Appartamento appartamento){
+        VBox area = new VBox();
+        area.setStyle("-fx-background-color: #bdbcbc; -fx-background-radius: 6px");
+        area.setPrefWidth(900);
+        area.setMinWidth(900);
+        area.setMaxWidth(900);
+        area.setPadding(new Insets(100, 0, 0, 100));
+
+        return area;
+    }
 
     private void showInserimentoAppartamento(Condominio condominio){
         VBox area = new VBox();

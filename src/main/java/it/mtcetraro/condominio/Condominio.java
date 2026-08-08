@@ -115,6 +115,31 @@ public class Condominio{
         }
     }
 
+    public List<Proprietario> showProp(Connection conn){
+        List<Proprietario> proprietari = new ArrayList<>();
+        String query = "SELECT DISTINCT p.CF, p.Nome, p.Cognome, p.Telefono, p.Email, p.Residenza FROM Appartamento a JOIN Proprietario p ON a.Proprietario = p.CF WHERE a.Condominio = ?";
+        try(PreparedStatement pstmt = conn.prepareStatement(query)){
+            pstmt.setString(1, this.nome);
+            try(ResultSet rs = pstmt.executeQuery()){
+                while(rs.next()){
+                    String Cod = rs.getString("CF");
+                    String Name = rs.getString("Nome");
+                    String Cogn = rs.getString("Cognome");
+                    String Phone = rs.getString("Telefono");
+                    String Email = rs.getString("Email");
+                    String Residenza = rs.getString("Residenza");
+
+                    Proprietario proprietario = new Proprietario(Cod, Name, Cogn, Phone, Email, Residenza);
+                    proprietari.add(proprietario);
+                }
+                return proprietari;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            return proprietari;
+        }
+    }
+
     @Override
     public String toString() {
         // Ritorna il testo che vuoi vedere visivamente nella ListView

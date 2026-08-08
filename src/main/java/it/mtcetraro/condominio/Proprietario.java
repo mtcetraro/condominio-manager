@@ -59,4 +59,9 @@ public class Proprietario {
         }
     }
 
+    @Override
+    public String toString(){
+        return this.codice_fiscale + " - " + this.cognome + " - " + this.telefono;
+    }
+
 }
