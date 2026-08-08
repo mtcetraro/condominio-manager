@@ -25,6 +25,35 @@ public class Appartamento{
         this.spesapersonale = spesapersonale;
         this.proprietario = proprietario;
     }
+    
+
+    public String getCondominio() {
+        return this.condominio;
+    }
+
+    public String getInterno() {
+        return this.interno;
+    }
+
+    public String getSubalterno() {
+        return this.subalterno;
+    }
+
+    public String getFoglio() {
+        return this.foglio;
+    }
+
+    public String getParticella() {
+        return this.particella;
+    }
+
+    public int getSpesapersonale() {
+        return this.spesapersonale;
+    }
+
+    public String getProprietario() {
+        return this.proprietario;
+    }
 
     public boolean inserisci(Connection conn){
         String query = "INSERT INTO Appartamento(Condominio, Interno, Subalterno, Foglio, Particella, SpesaPersonale, Proprietario) VALUES (?,?,?,?,?,?,?)";

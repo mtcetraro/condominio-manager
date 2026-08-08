@@ -151,7 +151,7 @@ public class DashboardView extends BorderPane{
                 if(appartamento_selezionato == null){
                     mostraMessaggio(AlertType.ERROR, "Appartamento inesistente", "Seleziona un appartamento presente nella lista!");
                 }else{
-                    mostraContenuto(showSpecificaAppartamento(appartamento_selezionato));
+                    mostraContenuto(showSpecificaAppartamento(appartamento_selezionato, condominio));
                 }
             }
         });
@@ -179,9 +179,10 @@ public class DashboardView extends BorderPane{
         aggiungi.setOnMouseClicked(e -> showInserimentoAppartamento(condominio));
 
         Button cambio = new Button("Proprietari");
-        cambio.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold;");
-        cambio.setOnMouseExited(e -> cambio.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold;"));
-        cambio.setOnMouseEntered(e -> cambio.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-weight: bold;"));
+        cambio.setPrefSize(90, 40);
+        cambio.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px");
+        cambio.setOnMouseExited(e -> cambio.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
+        cambio.setOnMouseEntered(e -> cambio.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
         cambio.setOnMouseClicked(e -> {
             ObservableList<Proprietario> lista_proprietari_obs = FXCollections.observableArrayList(); 
             ListView<Proprietario> lista_proprietari = new ListView<>(lista_proprietari_obs);
@@ -198,9 +199,10 @@ public class DashboardView extends BorderPane{
         });
 
         Button cambio_appartamenti = new Button("Appartamenti");
-        cambio_appartamenti.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold;");
-        cambio_appartamenti.setOnMouseExited(e -> cambio_appartamenti.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold;"));
-        cambio_appartamenti.setOnMouseEntered(e -> cambio_appartamenti.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-weight: bold;"));
+        cambio_appartamenti.setPrefSize(110, 40);
+        cambio_appartamenti.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px");
+        cambio_appartamenti.setOnMouseExited(e -> cambio_appartamenti.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
+        cambio_appartamenti.setOnMouseEntered(e -> cambio_appartamenti.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
         cambio_appartamenti.setOnMouseClicked(e -> mostraContenuto(contenutoView(condominio)));
 
         grid.add(cambio_appartamenti, 0, 2, 1, 1);
@@ -235,14 +237,127 @@ public class DashboardView extends BorderPane{
     }
 
 
-    private Node showSpecificaAppartamento(Appartamento appartamento){
+    private Node showSpecificaAppartamento(Appartamento appartamento, Condominio condominio){
         VBox area = new VBox();
         area.setStyle("-fx-background-color: #bdbcbc; -fx-background-radius: 6px");
         area.setPrefWidth(900);
         area.setMinWidth(900);
         area.setMaxWidth(900);
-        area.setPadding(new Insets(100, 0, 0, 100));
+        area.setPadding(new Insets(100, 100, 100, 100));
 
+        GridPane grid = new GridPane();
+        grid.setStyle(
+            "-fx-background-color: #ffffff; " +
+            "-fx-background-radius: 10px; " +
+            "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);"
+        );
+        grid.setPadding(new Insets(15, 30, 15, 30));
+        grid.setVgap(30);
+        grid.setHgap(20);
+
+        Label Titolo = new Label("Appartamento interno: " + appartamento.getInterno() + " - " + "Condominio: " + appartamento.getCondominio());
+        Titolo.setFont(Font.font("Segoe UI", FontWeight.BOLD, 20));
+        Titolo.setStyle("-fx-text-fill: #1e293b;");
+        grid.add(Titolo, 0, 0, 3, 1);
+
+        Label Interno = new Label("Interno:");
+        Interno.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField Intern = new TextField();
+        Intern.setText(appartamento.getInterno());
+        Intern.setEditable(false);
+        grid.add(Interno, 0, 1, 1, 1);
+        grid.add(Intern, 2, 1, 1, 1);
+
+        Label Subalterno = new Label("Subalterno:");
+        Subalterno.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField Subalt = new TextField();
+        Subalt.setText(appartamento.getSubalterno());
+        Subalt.setEditable(false);
+        grid.add(Subalterno, 0, 2, 1, 1);
+        grid.add(Subalt, 2, 2, 1, 1);
+
+        Label Foglio = new Label("Foglio:");
+        Foglio.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField Fog = new TextField();
+        Fog.setText(appartamento.getFoglio());
+        Fog.setEditable(false);
+        grid.add(Foglio, 0, 3, 1, 1);
+        grid.add(Fog, 2, 3, 1, 1);
+
+        Label Particella = new Label("Particella:");
+        Particella.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField Part = new TextField();
+        Part.setText(appartamento.getParticella());
+        Part.setEditable(false);
+        grid.add(Particella, 0, 4, 1, 1);
+        grid.add(Part, 2, 4, 1, 1);
+
+        Label SpesaPersonale = new Label("Spesa personale:");
+        SpesaPersonale.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField Spes = new TextField();
+        Spes.setText(String.valueOf(appartamento.getSpesapersonale()));
+        Spes.setEditable(false);
+        grid.add(SpesaPersonale, 0, 5, 1, 1);
+        grid.add(Spes, 2, 5, 1, 1);
+
+        Label Proprietario = new Label("Proprietario:");
+        Proprietario.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField Prop = new TextField();
+        Prop.setText(appartamento.getProprietario());
+        Prop.setEditable(false);
+        grid.add(Proprietario, 0, 6, 1, 1);
+        grid.add(Prop, 2, 6, 1, 1);
+
+        Button modifica = new Button("Modifica");
+        modifica.setStyle("-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;");
+        modifica.setOnMouseEntered(e -> modifica.setStyle(
+            "-fx-background-color: #1d4ed8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;"
+        ));
+        modifica.setOnMouseExited(e -> modifica.setStyle(
+            "-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;"
+        ));
+        modifica.setPrefSize(80, 40);
+
+        Button ritorna = new Button("Indietro");
+        ritorna.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px");
+        ritorna.setOnMouseExited(y -> ritorna.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
+        ritorna.setOnMouseEntered(y -> ritorna.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
+        ritorna.setPrefSize(80, 40);
+        ritorna.setOnMouseClicked(y -> mostraContenuto(contenutoView(condominio)));
+        grid.add(ritorna, 2, 7, 1, 1);
+        grid.setHalignment(ritorna, HPos.RIGHT);
+
+        modifica.setOnMouseClicked(e -> {
+            Intern.setEditable(true);
+            Subalt.setEditable(true);
+            Fog.setEditable(true);
+            Part.setEditable(true);
+            Spes.setEditable(true);
+            Prop.setEditable(true);
+
+            grid.getChildren().remove(modifica);
+            Button Salva = new Button("Salva");
+            Salva.setStyle("-fx-background-color: #0f5405; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px");
+            Salva.setOnMouseExited(t -> Salva.setStyle("-fx-background-color: #0f5405; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
+            Salva.setOnMouseEntered(t -> Salva.setStyle("-fx-background-color: #23ca09; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
+            Salva.setPrefSize(80, 40);
+            grid.add(Salva, 2, 7, 1, 1);
+            grid.setHalignment(Salva, HPos.CENTER);
+
+            Button Back = new Button("Indietro");
+            Back.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px");
+            Back.setOnMouseExited(z -> Back.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
+            Back.setOnMouseEntered(z -> Back.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
+            Back.setPrefSize(80, 40);
+            Back.setOnMouseClicked(z -> mostraContenuto(showSpecificaAppartamento(appartamento, condominio)));
+            grid.add(Back, 2, 7, 1, 1);
+            grid.setHalignment(Back, HPos.RIGHT);
+        });
+
+        grid.add(modifica, 2, 7, 1, 1);
+        grid.setHalignment(modifica, HPos.CENTER);
+
+        area.getChildren().add(grid);
         return area;
     }
 
