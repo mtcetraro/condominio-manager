@@ -84,6 +84,30 @@ public class Proprietario {
         }
     }
 
+    public boolean modifica(Connection conn, Proprietario proprietario){
+        String query = "UPDATE Proprietario SET CF=?, Telefono=?, Residenza=?, Email=?, Nome=?, Cognome=? WHERE CF=?";
+        try(PreparedStatement pstmt = conn.prepareStatement(query)){
+            pstmt.setString(1, proprietario.getCodice_fiscale());
+            pstmt.setString(2, proprietario.getTelefono());
+            pstmt.setString(3, proprietario.getResidenza());
+            pstmt.setString(4, proprietario.getEmail());
+            pstmt.setString(5, proprietario.getNome());
+            pstmt.setString(6, proprietario.getCognome());
+            pstmt.setString(7, this.codice_fiscale);
+
+            int rows = pstmt.executeUpdate();
+            if(rows == 1){
+                return true;
+            }else{
+                return false;
+            }
+
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     @Override
     public String toString(){
         return this.codice_fiscale + " - " + this.cognome + " - " + this.telefono;

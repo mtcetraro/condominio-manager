@@ -142,6 +142,7 @@ public class DashboardView extends BorderPane{
         ListView<Appartamento> lista_appartamenti = new ListView<>(lista_appartamenti_obs);
         lista_appartamenti.setPrefSize(600, 500);
         lista_appartamenti.setMaxWidth(600);
+        lista_appartamenti.setStyle("-fx-cell-size: 30px; -fx-font-size: 15px");
         
         caricaAppartamenti(condominio, lista_appartamenti_obs);
 
@@ -188,6 +189,7 @@ public class DashboardView extends BorderPane{
             ListView<Proprietario> lista_proprietari = new ListView<>(lista_proprietari_obs);
             lista_proprietari.setPrefSize(600, 500);
             lista_proprietari.setMaxWidth(600);
+            lista_proprietari.setStyle("-fx-cell-size: 30px; -fx-font-size: 15px");
             caricaProprietari(condominio, lista_proprietari_obs);
 
             grid.getChildren().remove(lista_appartamenti);
@@ -326,6 +328,40 @@ public class DashboardView extends BorderPane{
         modifica.setOnMouseExited(e -> modifica.setStyle(
             "-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;"
         ));
+        modifica.setOnMouseClicked(e -> {
+            modifica.setText("Salva");
+            modifica.setStyle("-fx-background-color: #0f5405; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px");
+            modifica.setOnMouseExited(t -> modifica.setStyle("-fx-background-color: #0f5405; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
+            modifica.setOnMouseEntered(t -> modifica.setStyle("-fx-background-color: #23ca09; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
+            modifica.setPrefSize(80, 40);
+            codic.setEditable(true);
+            Nom.setEditable(true);
+            Cog.setEditable(true);
+            Tel.setEditable(true);
+            Mail.setEditable(true);
+            Res.setEditable(true);
+
+            modifica.setOnMouseClicked(t ->{
+
+                String cod = codic.getText();
+                String nome = Nom.getText();
+                String cognome = Cog.getText();
+                String telefono = Tel.getText();
+                String email = Mail.getText();
+                String residenza = Res.getText();
+
+                Proprietario proprietario_modificato = new Proprietario(cod, nome, cognome, telefono, email, residenza);
+                Home home = new Home();
+                Boolean modificato = home.modificaProprietario(proprietario, proprietario_modificato);
+                if(modificato){
+                    mostraMessaggio(AlertType.CONFIRMATION, "Modifica effettuata", "I dati da te inseriti sono stati sovrascritti!");
+                    mostraContenuto(contenutoView(condominio));
+                }else{
+                    mostraMessaggio(AlertType.ERROR, "Errore!", "I dati da te inseriti non sono stati salvati. Ricontrolla i dati inseriti!");
+                }
+            });
+        });
+
         modifica.setPrefSize(80, 40);
         grid.add(modifica, 1, 7, 1, 1);
         grid.setHalignment(modifica, HPos.LEFT);
