@@ -101,6 +101,15 @@ public class Home {
         }
     }
 
+    public boolean modificaProprietario(Proprietario vecchio, Proprietario nuovo){
+        try(Connection conn = DatabaseManager.getConnection()){
+            return vecchio.modifica(conn, nuovo);
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean deleteAppartamento(Appartamento appartamento){
         try(Connection conn = DatabaseManager.getConnection()){
             boolean delete = appartamento.delete(conn);

@@ -68,6 +68,7 @@ public class CondominiView extends VBox {
 
         listviewcondominio = new ListView<>(listaCondomini);
         listviewcondominio.setPrefHeight(300);
+        listviewcondominio.setStyle("-fx-cell-size: 30px; -fx-font-size: 15px");
         
 
         caricaCondomini(Username);
