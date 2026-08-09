@@ -96,6 +96,29 @@ public class Appartamento{
         }
     }
 
+    public boolean modifica(Connection conn, Appartamento nuovo){
+        String query = "UPDATE Appartamento SET Interno = ?, Subalterno = ?, Foglio = ?, Particella = ?, SpesaPersonale = ?, Proprietario = ? WHERE Interno = ?";
+        try(PreparedStatement pstmt = conn.prepareStatement(query)){
+            pstmt.setString(1, nuovo.getInterno());
+            pstmt.setString(2, nuovo.getSubalterno());
+            pstmt.setString(3, nuovo.getFoglio());
+            pstmt.setString(4, nuovo.getParticella());
+            pstmt.setInt(5, nuovo.getSpesapersonale());
+            pstmt.setString(6, nuovo.getProprietario());
+            pstmt.setString(7, this.interno);
+
+            int rows = pstmt.executeUpdate();
+            if(rows==1){
+                return true;
+            }else{
+                return false;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     @Override 
     public String toString(){
         return this.interno + " - " + this.proprietario;

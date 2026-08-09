@@ -23,6 +23,31 @@ public class Proprietario {
     }
 
 
+    public String getCodice_fiscale() {
+        return this.codice_fiscale;
+    }
+
+    public String getNome() {
+        return this.nome;
+    }
+
+    public String getCognome() {
+        return this.cognome;
+    }
+
+    public String getTelefono() {
+        return this.telefono;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public String getResidenza() {
+        return this.residenza;
+    }
+
+
     public boolean inserimento(Connection conn){
         String query = "SELECT * FROM Proprietario WHERE CF=?";
         try(PreparedStatement pstmt = conn.prepareStatement(query)){
