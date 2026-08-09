@@ -194,6 +194,17 @@ public class DashboardView extends BorderPane{
             grid.add(lista_proprietari,  0, 1, 2, 1);
             title.setText("Proprietari nel condominio:");
 
+            lista_proprietari.setOnMouseClicked(f ->{
+                if(f.getClickCount() == 2 && f.getButton() == MouseButton.PRIMARY){
+                    Proprietario proprietario_selezionato = lista_proprietari.getSelectionModel().getSelectedItem();
+                    if(proprietario_selezionato != null){
+                        mostraContenuto(showSpecificaProprietario(proprietario_selezionato, condominio));
+                    }else{
+                        mostraMessaggio(AlertType.ERROR, "Errore di selezione", "Il proprietario selezionato non è disponibile. Controlla di aver selezionato un proprietario presente!");
+                    }
+                }
+            });
+
 
 
         });
@@ -234,6 +245,102 @@ public class DashboardView extends BorderPane{
         List<Appartamento> Appartamenti = home.showAppartamenti(condominio);
         lista_appartamenti_obs.clear();
         lista_appartamenti_obs.addAll(Appartamenti);
+    }
+
+    private Node showSpecificaProprietario(Proprietario proprietario, Condominio condominio){
+        VBox area = new VBox();
+        area.setStyle("-fx-background-color: #bdbcbc; -fx-background-radius: 6px");
+        area.setPrefWidth(900);
+        area.setMinWidth(900);
+        area.setMaxWidth(900);
+        area.setPadding(new Insets(100, 100, 100, 100));
+
+        GridPane grid = new GridPane();
+        grid.setStyle(
+            "-fx-background-color: #ffffff; " +
+            "-fx-background-radius: 10px; " +
+            "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);"
+        );
+        grid.setPadding(new Insets(15, 30, 15, 30));
+        grid.setVgap(30);
+        grid.setHgap(20);
+
+        Label Titolo = new Label("Proprietario: " + proprietario.getNome() + " " + proprietario.getNome());
+        Titolo.setFont(Font.font("Segoe UI", FontWeight.BOLD, 20));
+        Titolo.setStyle("-fx-text-fill: #1e293b;");
+        grid.add(Titolo, 0, 0, 3, 1);
+
+        Label CF = new Label("Codice fiscale:");
+        CF.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField codic = new TextField();
+        codic.setText(proprietario.getCodice_fiscale());
+        codic.setEditable(false);
+        grid.add(CF, 0, 1, 1, 1);
+        grid.add(codic, 2, 1, 1, 1);
+
+        Label Nome = new Label("Nome:");
+        Nome.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField Nom = new TextField();
+        Nom.setText(proprietario.getNome());
+        Nom.setEditable(false);
+        grid.add(Nome, 0, 2, 1, 1);
+        grid.add(Nom, 2, 2, 1, 1);
+
+        Label Cognome = new Label("Cognome:");
+        Cognome.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField Cog = new TextField();
+        Cog.setText(proprietario.getCognome());
+        Cog.setEditable(false);
+        grid.add(Cognome, 0, 3, 1, 1);
+        grid.add(Cog, 2, 3, 1, 1);
+
+        Label Telefono = new Label("Telefono:");
+        Telefono.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField Tel = new TextField();
+        Tel.setText(proprietario.getTelefono());
+        Tel.setEditable(false);
+        grid.add(Telefono, 0, 4, 1, 1);
+        grid.add(Tel, 2, 4, 1, 1);
+
+        Label Email = new Label("Email:");
+        Email.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField Mail = new TextField();
+        Mail.setText(proprietario.getEmail());
+        Mail.setEditable(false);
+        grid.add(Email, 0, 5, 1, 1);
+        grid.add(Mail, 2, 5, 1, 1);
+
+        Label Residenza = new Label("Residenza:");
+        Residenza.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField Res = new TextField();
+        Res.setText(proprietario.getResidenza());
+        Res.setEditable(false);
+        grid.add(Residenza, 0, 6, 1, 1);
+        grid.add(Res, 2, 6, 1, 1);
+
+        Button modifica = new Button("Modifica");
+        modifica.setStyle("-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;");
+        modifica.setOnMouseEntered(e -> modifica.setStyle(
+            "-fx-background-color: #1d4ed8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;"
+        ));
+        modifica.setOnMouseExited(e -> modifica.setStyle(
+            "-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;"
+        ));
+        modifica.setPrefSize(80, 40);
+        grid.add(modifica, 1, 7, 1, 1);
+        grid.setHalignment(modifica, HPos.LEFT);
+
+        Button ritorna = new Button("Indietro");
+        ritorna.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px");
+        ritorna.setOnMouseExited(y -> ritorna.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
+        ritorna.setOnMouseEntered(y -> ritorna.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
+        ritorna.setPrefSize(80, 40);
+        ritorna.setOnMouseClicked(y -> mostraContenuto(contenutoView(condominio)));
+        grid.add(ritorna, 2, 7, 1, 1);
+        grid.setHalignment(ritorna, HPos.RIGHT);
+
+        area.getChildren().add(grid);
+        return area;
     }
 
 
@@ -341,6 +448,28 @@ public class DashboardView extends BorderPane{
             Salva.setOnMouseExited(t -> Salva.setStyle("-fx-background-color: #0f5405; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
             Salva.setOnMouseEntered(t -> Salva.setStyle("-fx-background-color: #23ca09; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
             Salva.setPrefSize(80, 40);
+            Salva.setOnMouseClicked(t ->{
+                String inter = Intern.getText();
+                String sub = Subalt.getText();
+                String fog = Fog.getText();
+                String part = Part.getText();
+                String spesPers = Spes.getText();
+                int numeroSpesa = Integer.parseInt(spesPers);
+                String pro = Prop.getText();
+                String condom = condominio.getNome();
+
+                Appartamento appartamento_modificato = new Appartamento(condom, inter, sub, fog, part, numeroSpesa, pro);
+                Home home = new Home();
+                boolean modifica_riuscita = home.appartamentoModificato(appartamento, appartamento_modificato);
+                if(modifica_riuscita){
+                    mostraMessaggio(AlertType.CONFIRMATION, "Appartamento modificato", "L'appartamento è stato modificato con le modifiche suggerite");
+                    mostraContenuto(contenutoView(condominio));
+                }else{
+                    mostraMessaggio(AlertType.ERROR, "Errore nella modifica", "Le modifiche inserite non sono state salvate. Controllare di aver salvato il proprietario prima di aggiungergli un appartamento");
+                }
+
+                
+            });
             grid.add(Salva, 2, 7, 1, 1);
             grid.setHalignment(Salva, HPos.CENTER);
 
