@@ -1,6 +1,7 @@
 package it.mtcetraro.condominio;
 import javafx.collections.ObservableList;
 
+import java.sql.Date;
 import java.util.List;
 
 import javafx.collections.FXCollections;
@@ -334,7 +335,7 @@ public class DashboardView extends BorderPane{
         data.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
         TextField dat = new TextField();
         dat.setPrefWidth(200);
-        dat.setPromptText("lasciare vuoto se non indicata ...");;
+        dat.setPromptText("YYYY-MM-DD");;
         grid.add(data, 0, 4, 1, 1);
         grid.add(dat, 2, 4, 1, 1);
 
@@ -355,6 +356,25 @@ public class DashboardView extends BorderPane{
         send.setOnMouseExited(e -> send.setStyle(
             "-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;"
         ));
+        send.setOnMouseClicked(e ->{
+            String nome_condominio = condominio.getNome();
+            String num_fattura = fattur.getText();
+            String tip = tipo.getText();
+            double price = Double.parseDouble(cifr.getText());
+            String data_testo = dat.getText();
+            Date data_pagamento = Date.valueOf(data_testo);
+            String tabel = tab.getText();
+
+            Spesa spesa = new Spesa(num_fattura, nome_condominio, tip, price, data_pagamento, tabel);
+            Home home = new Home();
+            boolean spesaInserita = home.inserisciSpesa(spesa);
+            if(spesaInserita){
+                mostraMessaggio(AlertType.CONFIRMATION, "Inserimento effettuato", "La spesa è stata inserita correttamente");
+                mostraContenuto(contenutoSpesa(condominio));
+            }else{
+                mostraMessaggio(AlertType.ERROR, "Errore", "L'inserimento non è andato a buon fine. Controllare i dati inseriti!");
+            }
+        });
         grid.add(send, 2, 6, 1, 1);
         grid.setHalignment(send, HPos.RIGHT);
 

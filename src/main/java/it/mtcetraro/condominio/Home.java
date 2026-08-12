@@ -129,5 +129,15 @@ public class Home {
             return false;
         }
     }
+
+    public boolean inserisciSpesa(Spesa spesa){
+        try(Connection conn = DatabaseManager.getConnection()){
+            boolean spesaInserita = spesa.inserisci(conn);
+            return spesaInserita;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
 
