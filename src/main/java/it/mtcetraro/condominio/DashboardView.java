@@ -29,6 +29,10 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.Node;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.StackedBarChart;
 
 public class DashboardView extends BorderPane{
     private VBox sidebar;
@@ -109,6 +113,7 @@ public class DashboardView extends BorderPane{
         costo.setAlignment(Pos.CENTER_LEFT);
         costo.setOnMouseExited(e -> costo.setStyle("-fx-font-size:13; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-color: #675c2a; -fx-text-fill: #ffffff"));
         costo.setOnMouseEntered(e -> costo.setStyle("-fx-font-size:13; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-color: #f4da68; -fx-text-fill: #ffffff"));
+        costo.setOnMouseClicked(e -> mostraContenuto(contenutoSpesa(condominio)));
 
         menuBar.getChildren().addAll(home, view, costo);
 
@@ -121,6 +126,50 @@ public class DashboardView extends BorderPane{
         areaContenuto.getChildren().clear();
 
         areaContenuto.getChildren().add(nuovoContenuto);
+    }
+
+    private Node contenutoSpesa(Condominio condominio){
+        VBox contenuto = new VBox();
+        contenuto.setStyle("-fx-background-color: #bdbcbc; -fx-background-radius: 6px");
+        contenuto.setPrefWidth(900);
+        contenuto.setMinWidth(900);
+        contenuto.setMaxWidth(900);
+        contenuto.setPadding(new Insets(100, 0, 0, 100));
+
+        GridPane grid = new GridPane();
+        grid.setVgap(30);
+
+        Label title = new Label("Sezione spese: ---- " + condominio.getNome());
+        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 20));
+        title.setStyle("-fx-text-fill: #1e293b;");
+
+        grid.add(title, 0, 0, 1, 1);
+
+        Button aggiungi = new Button("Aggiungi");
+        aggiungi.setStyle("-fx-background-color: #1d4ed8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;");
+        aggiungi.setOnMouseClicked(e -> mostraContenuto(aggiungiSpesa(condominio)));
+        
+
+        CategoryAxis xAxis = new CategoryAxis();
+        xAxis.setLabel("Tipologia Spese");
+
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel("Importo (€)"); 
+
+
+        StackedBarChart<String, Number> stackedChart = new StackedBarChart<>(xAxis, yAxis);
+        stackedChart.setTitle("Ripartizione delle spese per tipologia");
+        stackedChart.setPrefSize(600, 500);;
+
+        grid.add(stackedChart, 0, 1, 2, 2);
+        grid.add(aggiungi, 3, 0, 1, 1);
+
+        Button cambia = new Button("Change");
+        cambia.setStyle("-fx-background-color: #bf1dd8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;");
+        grid.add(cambia, 3, 3, 1, 1);
+
+        contenuto.getChildren().add(grid);
+        return contenuto;
     }
 
     private Node contenutoView(Condominio condominio){
@@ -232,6 +281,94 @@ public class DashboardView extends BorderPane{
 
 
         return contenuto;
+    }
+
+    private Node aggiungiSpesa(Condominio condominio){
+        VBox area = new VBox();
+        area.setStyle("-fx-background-color: #bdbcbc; -fx-background-radius: 6px");
+        area.setPrefWidth(900);
+        area.setMinWidth(900);
+        area.setMaxWidth(900);
+        area.setPadding(new Insets(100, 100, 100, 100));
+
+        GridPane grid = new GridPane();
+        grid.setStyle(
+            "-fx-background-color: #ffffff; " +
+            "-fx-background-radius: 10px; " +
+            "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);"
+        );
+        grid.setPadding(new Insets(15, 30, 15, 30));
+        grid.setVgap(30);
+        grid.setHgap(20);
+
+        Label Titolo = new Label("Spesa da aggiungere:");
+        Titolo.setFont(Font.font("Segoe UI", FontWeight.BOLD, 20));
+        Titolo.setStyle("-fx-text-fill: #1e293b;");
+        grid.add(Titolo, 0, 0, 3, 1);
+
+        Label fattura = new Label("Numero fattura:");
+        fattura.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField fattur = new TextField();
+        fattur.setPrefWidth(200);
+        fattur.setPromptText("Numero fattura...");
+        grid.add(fattura, 0, 1, 1, 1);
+        grid.add(fattur, 2, 1, 1, 1);
+
+        Label tipologia = new Label("Tipologia:");
+        tipologia.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField tipo = new TextField();
+        tipo.setPrefWidth(200);
+        tipo.setPromptText("Giardino, luci. manutenzione ...");
+        grid.add(tipologia, 0, 2, 1, 1);
+        grid.add(tipo, 2, 2, 1, 1);
+
+        Label cifra = new Label("Cifra:");
+        cifra.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField cifr = new TextField();
+        cifr.setPrefWidth(200);
+        cifr.setPromptText("200.95 ...");;
+        grid.add(cifra, 0, 3, 1, 1);
+        grid.add(cifr, 2, 3, 1, 1);
+
+        Label data = new Label("Data del pagamento:");
+        data.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField dat = new TextField();
+        dat.setPrefWidth(200);
+        dat.setPromptText("lasciare vuoto se non indicata ...");;
+        grid.add(data, 0, 4, 1, 1);
+        grid.add(dat, 2, 4, 1, 1);
+
+        Label tabella = new Label("Tabella millesimale:");
+        tabella.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField tab = new TextField();
+        tab.setPrefWidth(200);
+        tab.setPromptText("A, B ...");;
+        grid.add(tabella, 0, 5, 1, 1);
+        grid.add(tab, 2, 5, 1, 1);
+
+        Button send = new Button("Invia");
+        send.setPrefSize(80, 40);
+        send.setStyle("-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;");
+        send.setOnMouseEntered(e -> send.setStyle(
+            "-fx-background-color: #1d4ed8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;"
+        ));
+        send.setOnMouseExited(e -> send.setStyle(
+            "-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;"
+        ));
+        grid.add(send, 2, 6, 1, 1);
+        grid.setHalignment(send, HPos.RIGHT);
+
+        Button ritorna = new Button("Indietro");
+        ritorna.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px");
+        ritorna.setOnMouseExited(y -> ritorna.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
+        ritorna.setOnMouseEntered(y -> ritorna.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
+        ritorna.setPrefSize(80, 40);
+        ritorna.setOnMouseClicked(y -> mostraContenuto(contenutoSpesa(condominio)));
+        grid.add(ritorna, 0, 6, 1 ,1);
+        grid.setHalignment(ritorna, HPos.LEFT);
+
+        area.getChildren().add(grid);
+        return area;
     }
 
 
