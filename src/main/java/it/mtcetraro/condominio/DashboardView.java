@@ -2,7 +2,9 @@ package it.mtcetraro.condominio;
 import javafx.collections.ObservableList;
 
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javafx.collections.FXCollections;
 import javafx.geometry.HPos;
@@ -34,6 +36,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedBarChart;
+import javafx.scene.chart.XYChart;
 
 public class DashboardView extends BorderPane{
     private VBox sidebar;
@@ -153,6 +156,7 @@ public class DashboardView extends BorderPane{
 
         CategoryAxis xAxis = new CategoryAxis();
         xAxis.setLabel("Tipologia Spese");
+        xAxis.setStyle("-fx-font-weight: bold; -fx-font-size: 12px; -fx-fill: #1e293b;");
 
         NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel("Importo (€)"); 
@@ -160,7 +164,19 @@ public class DashboardView extends BorderPane{
 
         StackedBarChart<String, Number> stackedChart = new StackedBarChart<>(xAxis, yAxis);
         stackedChart.setTitle("Ripartizione delle spese per tipologia");
-        stackedChart.setPrefSize(600, 500);;
+        stackedChart.setPrefSize(600, 500);
+        stackedChart.setStyle("-fx-category-gap: 45px;");
+
+        XYChart.Series<String, Number> serieOrdinarie = new XYChart.Series<>();
+        serieOrdinarie.setName("Spese Ordinarie");
+
+        Home home = new Home();
+        Map<String, Double> map = home.estraiSpesa(condominio); 
+        map.forEach((i , y) -> {
+            serieOrdinarie.getData().add(new XYChart.Data<>(i, y));
+        });
+
+        stackedChart.getData().add(serieOrdinarie);
 
         grid.add(stackedChart, 0, 1, 2, 2);
         grid.add(aggiungi, 3, 0, 1, 1);
