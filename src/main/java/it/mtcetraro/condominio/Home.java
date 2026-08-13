@@ -3,6 +3,7 @@ package it.mtcetraro.condominio;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public class Home {
     
@@ -137,6 +138,16 @@ public class Home {
         }catch(SQLException e){
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public Map<String, Double> estraiSpesa(Condominio condominio){
+        try(Connection conn = DatabaseManager.getConnection()){
+            Map<String, Double> mapp = condominio.estraiPerTipo(conn);
+            return mapp;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null;
         }
     }
 }

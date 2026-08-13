@@ -1,10 +1,13 @@
 package it.mtcetraro.condominio;
 import java.util.List;
+import java.util.Map;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Condominio{
     //attributi
@@ -137,6 +140,28 @@ public class Condominio{
         }catch(SQLException e){
             e.printStackTrace();
             return proprietari;
+        }
+    }
+
+    public Map<String, Double> estraiPerTipo(Connection conn){
+        Map<String, Double> mappa = new HashMap<>();
+        //TODO: GROUP BY anche per Tabella Millesimale
+        //TODO: Aggiungere nel WHERE anche il Date per i filtri di anni 
+        String query = "SELECT Tipologia, SUM(Cifra) AS Cifra FROM Spesa WHERE Condominio=? GROUP BY Tipologia";
+        try(PreparedStatement pstmt = conn.prepareStatement(query)){
+            pstmt.setString(1, this.nome);
+            try(ResultSet rs = pstmt.executeQuery()){
+                while(rs.next()){
+                    String tipologia = rs.getString("Tipologia");
+                    Double cifra = rs.getDouble("Cifra");
+                
+                    mappa.put(tipologia, cifra);
+                }
+                return mappa;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            return mappa;
         }
     }
 
