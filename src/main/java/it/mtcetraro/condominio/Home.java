@@ -141,9 +141,9 @@ public class Home {
         }
     }
 
-    public Map<String, Double> estraiSpesa(Condominio condominio){
+    public Map<String, Double> estraiSpesa(Condominio condominio, int anno){
         try(Connection conn = DatabaseManager.getConnection()){
-            Map<String, Double> mapp = condominio.estraiPerTipo(conn);
+            Map<String, Double> mapp = condominio.estraiPerTipo(conn, anno);
             return mapp;
         }catch(SQLException e){
             e.printStackTrace();
