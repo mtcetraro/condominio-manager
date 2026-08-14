@@ -2,6 +2,7 @@ package it.mtcetraro.condominio;
 import javafx.collections.ObservableList;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.ComboBox;
 
 public class DashboardView extends BorderPane{
     private VBox sidebar;
@@ -156,7 +158,8 @@ public class DashboardView extends BorderPane{
 
         CategoryAxis xAxis = new CategoryAxis();
         xAxis.setLabel("Tipologia Spese");
-        xAxis.setStyle("-fx-font-weight: bold; -fx-font-size: 12px; -fx-fill: #1e293b;");
+        xAxis.setStyle("-fx-font-weight: bold; -fx-font-size: 12px; -fx-fill: #bf1dd8;");
+        xAxis.setTickLabelFont(Font.font("System", FontWeight.BOLD, 12));
 
         NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel("Importo (€)"); 
@@ -165,18 +168,46 @@ public class DashboardView extends BorderPane{
         StackedBarChart<String, Number> stackedChart = new StackedBarChart<>(xAxis, yAxis);
         stackedChart.setTitle("Ripartizione delle spese per tipologia");
         stackedChart.setPrefSize(600, 500);
-        stackedChart.setStyle("-fx-category-gap: 45px;");
+        stackedChart.setStyle("-fx-category-gap: 70px;");
+
+        stackedChart.setAnimated(false);
 
         XYChart.Series<String, Number> serieOrdinarie = new XYChart.Series<>();
-        serieOrdinarie.setName("Spese Ordinarie");
-
-        Home home = new Home();
-        Map<String, Double> map = home.estraiSpesa(condominio); 
-        map.forEach((i , y) -> {
-            serieOrdinarie.getData().add(new XYChart.Data<>(i, y));
-        });
+        serieOrdinarie.setName("Spese ordinarie");
 
         stackedChart.getData().add(serieOrdinarie);
+
+        //IMPLEMENTAZIONE DELLA COMBO BOX PER FILTRI
+
+        ComboBox<Integer> annBox = new ComboBox<>();
+        ObservableList<Integer> anni = FXCollections.observableArrayList();
+
+        int annoCorrente = LocalDate.now().getYear();
+        for(int anno = annoCorrente; anno>=2020; anno--){
+            anni.add(anno);
+        }
+
+        annBox.setItems(anni);
+        annBox.setPromptText("Seleziona anno:");
+        grid.add(annBox, 3, 1, 1, 1);
+
+        annBox.setOnAction(e->{
+            if(annBox.getValue() == null){
+                return;
+            }
+            int anno_selezionato = annBox.getValue();
+            
+            Home home = new Home();
+            Map<String, Double> map = home.estraiSpesa(condominio, anno_selezionato); 
+
+            serieOrdinarie.getData().clear();
+
+            map.forEach((i , y) -> {
+                serieOrdinarie.getData().add(new XYChart.Data<>(i, y));
+            });
+        });
+
+
 
         grid.add(stackedChart, 0, 1, 2, 2);
         grid.add(aggiungi, 3, 0, 1, 1);
@@ -184,6 +215,7 @@ public class DashboardView extends BorderPane{
         Button cambia = new Button("Change");
         cambia.setStyle("-fx-background-color: #bf1dd8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;");
         grid.add(cambia, 3, 3, 1, 1);
+
 
         contenuto.getChildren().add(grid);
         return contenuto;
