@@ -2,6 +2,7 @@ package it.mtcetraro.condominio;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -145,6 +146,16 @@ public class Home {
         try(Connection conn = DatabaseManager.getConnection()){
             Map<String, Double> mapp = condominio.estraiPerTipo(conn, anno);
             return mapp;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<Spesa> getSpesa(Condominio condominio, int anno){
+        try(Connection conn = DatabaseManager.getConnection()){
+            List<Spesa> spese = condominio.caricaSpesaAnno(conn, anno);
+            return spese;
         }catch(SQLException e){
             e.printStackTrace();
             return null;

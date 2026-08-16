@@ -166,6 +166,33 @@ public class Condominio{
         }
     }
 
+    public List<Spesa> caricaSpesaAnno(Connection conn, int anno){
+        List<Spesa> spese = new ArrayList<>();
+        //TODO: GROUP BY anche per Tabella Millesimale
+        //TODO: Aggiungere nel WHERE anche il Date per i filtri di anni 
+        String query = "SELECT NumFattura, Tipologia, DataPagamento, TabellaMillessimale, Cifra AS Cifra FROM Spesa WHERE Condominio=? AND EXTRACT(YEAR FROM DataPagamento) = ?";
+        try(PreparedStatement pstmt = conn.prepareStatement(query)){
+            pstmt.setString(1, this.nome);
+            pstmt.setInt(2, anno);
+            try(ResultSet rs = pstmt.executeQuery()){
+                while(rs.next()){
+                    String tipologia = rs.getString("Tipologia");
+                    Double cifra = rs.getDouble("Cifra");
+                    String fattura = rs.getString("NumFattura");
+                    Date data = rs.getDate("DataPagamento");
+                    String tabella = rs.getString("TabellaMillessimale");
+
+                    Spesa spesa = new Spesa(fattura, this.nome, tipologia, cifra, data, tabella);
+                    spese.add(spesa);
+                }
+                return spese;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            return spese;
+        }
+    }
+
     @Override
     public String toString() {
         // Ritorna il testo che vuoi vedere visivamente nella ListView

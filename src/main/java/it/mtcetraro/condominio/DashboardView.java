@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Alert.AlertType;
@@ -190,6 +191,7 @@ public class DashboardView extends BorderPane{
         annBox.setItems(anni);
         annBox.setPromptText("Seleziona anno:");
         grid.add(annBox, 3, 1, 1, 1);
+        annBox.setValue(annoCorrente);
 
         annBox.setOnAction(e->{
             if(annBox.getValue() == null){
@@ -215,10 +217,80 @@ public class DashboardView extends BorderPane{
         Button cambia = new Button("Change");
         cambia.setStyle("-fx-background-color: #bf1dd8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;");
         grid.add(cambia, 3, 3, 1, 1);
+        cambia.setOnMouseClicked(e->{
+            grid.getChildren().remove(stackedChart);
+            
+            PieChart torta = new PieChart();
+            torta.setPrefSize(600, 500);
+            torta.setAnimated(false);
+            torta.setLegendSide(Side.LEFT);
 
+            int old_year = annoCorrente;
+            if(annBox.getValue() != null){
+                old_year = annBox.getValue();
+            }
+            
+
+            annBox.setValue(null);
+
+            annBox.setOnAction(t->{
+            if(annBox.getValue() == null){
+                return;
+            }
+            int anno_selezionato = annBox.getValue();
+            
+            Home home = new Home();
+            Map<String, Double> map = home.estraiSpesa(condominio, anno_selezionato); 
+
+            torta.getData().clear();
+
+            map.forEach((i , y) -> {
+                torta.getData().add(new PieChart.Data(i, y));
+            });
+            });
+
+
+            annBox.setValue(old_year);
+
+            grid.add(torta, 0, 1, 2, 2);
+
+            cambia.setOnMouseClicked(z->{
+                grid.getChildren().remove(torta);
+
+                ObservableList<Spesa> observableListSpesa = FXCollections.observableArrayList();
+                ListView<Spesa> listViewSpesa = new ListView<>(observableListSpesa);
+                listViewSpesa.setPrefSize(600, 500);
+                listViewSpesa.setStyle("-fx-cell-size: 30px; -fx-font-size: 15px");
+
+                int anno_viejo = annBox.getValue();
+                annBox.setValue(null);
+                annBox.setValue(anno_viejo);
+                caricaSpesa(condominio, annBox.getValue(), observableListSpesa);
+
+                annBox.setOnAction(t->{
+                if(annBox.getValue() == null){
+                    return;
+                }
+                caricaSpesa(condominio, annBox.getValue(), observableListSpesa);
+                });
+
+                cambia.setOnMouseClicked(y->{
+                    mostraContenuto(contenutoSpesa(condominio));
+                });
+
+                grid.add(listViewSpesa, 0, 1, 2, 2);
+            });
+        });
 
         contenuto.getChildren().add(grid);
         return contenuto;
+    }
+
+    private void caricaSpesa(Condominio condominio, int anno, ObservableList<Spesa> observableListSpesa){
+        Home home = new Home();
+        List<Spesa> listone = home.getSpesa(condominio, anno);
+        observableListSpesa.clear();
+        observableListSpesa.addAll(listone);
     }
 
     private Node contenutoView(Condominio condominio){

@@ -45,5 +45,8 @@ public class Spesa {
         }
     }
 
-    
+    @Override
+    public String toString(){
+        return "Num.Fattura: " + this.fattura + " - " + String.valueOf(this.cifra)+"€" + " - " + this.tipologia + " - " + String.valueOf(this.data); 
+    }
 }
