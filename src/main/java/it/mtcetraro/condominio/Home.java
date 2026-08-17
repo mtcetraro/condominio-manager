@@ -171,5 +171,15 @@ public class Home {
             return false;
         }
     }
+
+    public Boolean eliminaSpesa(Spesa spesa){
+        try(Connection conn = DatabaseManager.getConnection()){
+            boolean rimossa = spesa.rimuovi(conn);
+            return rimossa;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
 

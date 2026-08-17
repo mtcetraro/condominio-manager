@@ -290,6 +290,24 @@ public class DashboardView extends BorderPane{
                     }
                 });
 
+                listViewSpesa.setOnKeyPressed(t->{
+                    if(t.getCode() == KeyCode.D){
+                        Spesa spesa_rimossa = listViewSpesa.getSelectionModel().getSelectedItem();
+                        if(spesa_rimossa==null){
+                            mostraMessaggio(AlertType.ERROR, "Elemento inesistente", "La spesa selezionata non risulta presente nell'elenco. Seleziona una spesa presente nella lista!");
+                        }else{
+                            Home home = new Home();
+                            boolean eliminata = home.eliminaSpesa(spesa_rimossa);
+                            if(eliminata){
+                                mostraMessaggio(AlertType.CONFIRMATION, "Spesa rimossa", "La spesa da te selezionato è stata rimossa dalla lista delle spese del condominio");
+                                mostraContenuto(contenutoSpesa(condominio));
+                            }else{
+                                mostraMessaggio(AlertType.ERROR, "Rimozione fallita", "E' stato impossibile rimuovere la spesa selezionata!");
+                            }
+                        }
+                    }
+                });
+
             });
         });
 

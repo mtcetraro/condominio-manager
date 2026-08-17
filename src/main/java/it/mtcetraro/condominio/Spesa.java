@@ -48,6 +48,22 @@ public class Spesa {
         return tabella;
     }
 
+    public boolean rimuovi(Connection conn){
+        String query = "DELETE FROM Spesa WHERE NumFattura=?";
+        try(PreparedStatement pstmt = conn.prepareStatement(query)){
+            pstmt.setString(1, this.fattura);
+            int rows = pstmt.executeUpdate();
+            if(rows == 1){
+                return true;
+            }else{
+                return false;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean modifica(Connection conn, Spesa spesa){
         String query = "UPDATE Spesa SET NumFattura=?, Condominio=?, Tipologia=?, Cifra=?, DataPagamento=?, TabellaMillessimale=? WHERE NumFattura=?";
         try(PreparedStatement pstmt = conn.prepareStatement(query)){
