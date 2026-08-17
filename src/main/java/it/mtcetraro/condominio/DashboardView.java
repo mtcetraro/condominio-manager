@@ -191,8 +191,7 @@ public class DashboardView extends BorderPane{
         annBox.setItems(anni);
         annBox.setPromptText("Seleziona anno:");
         grid.add(annBox, 3, 1, 1, 1);
-        annBox.setValue(annoCorrente);
-
+        
         annBox.setOnAction(e->{
             if(annBox.getValue() == null){
                 return;
@@ -274,16 +273,150 @@ public class DashboardView extends BorderPane{
                 caricaSpesa(condominio, annBox.getValue(), observableListSpesa);
                 });
 
-                cambia.setOnMouseClicked(y->{
+                cambia.setOnMouseClicked(t->{
                     mostraContenuto(contenutoSpesa(condominio));
                 });
 
                 grid.add(listViewSpesa, 0, 1, 2, 2);
+
+                listViewSpesa.setOnMouseClicked(t->{
+                    if(t.getClickCount() == 2 && t.getButton()==MouseButton.PRIMARY){
+                        Spesa spesa_selezionata = listViewSpesa.getSelectionModel().getSelectedItem();
+                        if(spesa_selezionata==null){
+                            mostraMessaggio(AlertType.ERROR, "Elemento inesistente", "La spesa selezionata non risulta presente nell'elenco. Seleziona una spesa presente nella lista!");
+                        }else{
+                            mostraContenuto(showSpecificaSpesa(spesa_selezionata, condominio));
+                        }
+                    }
+                });
+
             });
         });
 
         contenuto.getChildren().add(grid);
         return contenuto;
+    }
+
+    private Node showSpecificaSpesa(Spesa spesa, Condominio condominio){
+        VBox area = new VBox();
+        area.setStyle("-fx-background-color: #bdbcbc; -fx-background-radius: 6px");
+        area.setPrefWidth(900);
+        area.setMinWidth(900);
+        area.setMaxWidth(900);
+        area.setPadding(new Insets(100, 100, 100, 100));
+
+        GridPane grid = new GridPane();
+        grid.setStyle(
+            "-fx-background-color: #ffffff; " +
+            "-fx-background-radius: 10px; " +
+            "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);"
+        );
+        grid.setPadding(new Insets(15, 30, 15, 30));
+        grid.setVgap(30);
+        grid.setHgap(20);
+
+        Label Titolo = new Label("Spesa selezionata: " + spesa.getFattura());
+        Titolo.setFont(Font.font("Segoe UI", FontWeight.BOLD, 20));
+        Titolo.setStyle("-fx-text-fill: #1e293b;");
+        grid.add(Titolo, 0, 0, 3, 1);
+
+        Label Fattura = new Label("Numero fattura:");
+        Fattura.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField fattur = new TextField();
+        fattur.setText(spesa.getFattura());
+        fattur.setEditable(false);
+        grid.add(Fattura, 0, 1, 1, 1);
+        grid.add(fattur, 2, 1, 1, 1);
+
+        Label Tipologia = new Label("Tipologia:");
+        Tipologia.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField Tip = new TextField();
+        Tip.setText(spesa.getTipologia());
+        Tip.setEditable(false);
+        grid.add(Tipologia, 0, 2, 1, 1);
+        grid.add(Tip, 2, 2, 1, 1);
+
+        Label Cifra = new Label("Cifra:");
+        Cifra.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField cifr = new TextField();
+        cifr.setText(String.valueOf(spesa.getCifra()));
+        cifr.setEditable(false);
+        grid.add(Cifra, 0, 3, 1, 1);
+        grid.add(cifr, 2, 3, 1, 1);
+
+        Label DataPagamento = new Label("Data pagamento:");
+        DataPagamento.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField dat = new TextField();
+        dat.setText(String.valueOf(spesa.getData()));
+        dat.setEditable(false);
+        grid.add(DataPagamento, 0, 4, 1, 1);
+        grid.add(dat, 2, 4, 1, 1);
+
+        Label Tabella = new Label("Tabella Millesimale:");
+        Tabella.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField tab = new TextField();
+        tab.setText(spesa.getTabella());
+        tab.setEditable(false);
+        grid.add(Tabella, 0, 5, 1, 1);
+        grid.add(tab, 2, 5, 1, 1);
+
+
+        Button modifica = new Button("Modifica");
+        modifica.setStyle("-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;");
+        modifica.setOnMouseEntered(e -> modifica.setStyle(
+            "-fx-background-color: #1d4ed8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;"
+        ));
+        modifica.setOnMouseExited(e -> modifica.setStyle(
+            "-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;"
+        ));
+        modifica.setOnMouseClicked(e -> {
+            modifica.setText("Salva");
+            modifica.setStyle("-fx-background-color: #0f5405; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px");
+            modifica.setOnMouseExited(t -> modifica.setStyle("-fx-background-color: #0f5405; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
+            modifica.setOnMouseEntered(t -> modifica.setStyle("-fx-background-color: #23ca09; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
+            modifica.setPrefSize(80, 40);
+            fattur.setEditable(true);
+            Tip.setEditable(true);
+            cifr.setEditable(true);
+            dat.setEditable(true);
+            tab.setEditable(true);
+
+            modifica.setOnMouseClicked(t ->{
+
+                String fattura = fattur.getText();
+                String tipologia = Tip.getText();
+                Double cifra = Double.valueOf(cifr.getText());
+                Date data = Date.valueOf(dat.getText());
+                String tabella = tab.getText();
+
+
+                Spesa spesa_modificata = new Spesa(fattura, spesa.getCondominio(), tipologia, cifra, data, tabella);
+                Home home = new Home();
+                Boolean modificato = home.modificaSpesa(spesa, spesa_modificata);
+                if(modificato){
+                    mostraMessaggio(AlertType.CONFIRMATION, "Modifica effettuata", "I dati da te inseriti sono stati sovrascritti!");
+                    mostraContenuto(contenutoSpesa(condominio));
+                }else{
+                    mostraMessaggio(AlertType.ERROR, "Errore!", "I dati da te inseriti non sono stati salvati. Ricontrolla i dati inseriti!");
+                }
+            });
+        });
+
+        modifica.setPrefSize(80, 40);
+        grid.add(modifica, 1, 6, 1, 1);
+        grid.setHalignment(modifica, HPos.LEFT);
+
+        Button ritorna = new Button("Indietro");
+        ritorna.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px");
+        ritorna.setOnMouseExited(y -> ritorna.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
+        ritorna.setOnMouseEntered(y -> ritorna.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
+        ritorna.setPrefSize(80, 40);
+        ritorna.setOnMouseClicked(y -> mostraContenuto(contenutoSpesa(condominio)));
+        grid.add(ritorna, 2, 6, 1, 1);
+        grid.setHalignment(ritorna, HPos.RIGHT);
+
+        area.getChildren().add(grid);
+        return area;
     }
 
     private void caricaSpesa(Condominio condominio, int anno, ObservableList<Spesa> observableListSpesa){
