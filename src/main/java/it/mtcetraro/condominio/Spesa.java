@@ -24,6 +24,69 @@ public class Spesa {
         this.tabella = tabella;
     }
 
+    public String getFattura() {
+    return fattura;
+    }
+
+    public String getCondominio() {
+        return condominio;
+    }
+
+    public String getTipologia() {
+        return tipologia;
+    }
+
+    public Double getCifra() {
+        return cifra;
+    }
+
+    public Date getData() {
+        return data;
+    }
+
+    public String getTabella() {
+        return tabella;
+    }
+
+    public boolean rimuovi(Connection conn){
+        String query = "DELETE FROM Spesa WHERE NumFattura=?";
+        try(PreparedStatement pstmt = conn.prepareStatement(query)){
+            pstmt.setString(1, this.fattura);
+            int rows = pstmt.executeUpdate();
+            if(rows == 1){
+                return true;
+            }else{
+                return false;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean modifica(Connection conn, Spesa spesa){
+        String query = "UPDATE Spesa SET NumFattura=?, Condominio=?, Tipologia=?, Cifra=?, DataPagamento=?, TabellaMillessimale=? WHERE NumFattura=?";
+        try(PreparedStatement pstmt = conn.prepareStatement(query)){
+            pstmt.setString(1, this.fattura);
+            pstmt.setString(2, this.condominio);
+            pstmt.setString(3, this.tipologia);
+            pstmt.setDouble(4, this.cifra);
+            pstmt.setDate(5, this.data);
+            pstmt.setString(6, this.tabella);
+            pstmt.setString(7, spesa.getFattura());
+            int rows = pstmt.executeUpdate();
+            if(rows==1){
+                return true;
+            }else{
+                return false;
+            }
+            
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean inserisci(Connection conn){
         String query = "INSERT INTO SPESA(NumFattura, Condominio, Tipologia, Cifra, DataPagamento, TabellaMillessimale) VALUES (?, ?, ?, ?, ?, ?)";
         try(PreparedStatement pstmt = conn.prepareStatement(query)){

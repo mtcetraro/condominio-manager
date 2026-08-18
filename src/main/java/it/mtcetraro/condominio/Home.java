@@ -161,5 +161,25 @@ public class Home {
             return null;
         }
     }
+
+    public Boolean modificaSpesa(Spesa spesa_vecchia, Spesa spesa_nuova){
+        try(Connection conn = DatabaseManager.getConnection()){
+            boolean modificata = spesa_nuova.modifica(conn, spesa_vecchia);
+            return modificata;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Boolean eliminaSpesa(Spesa spesa){
+        try(Connection conn = DatabaseManager.getConnection()){
+            boolean rimossa = spesa.rimuovi(conn);
+            return rimossa;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
 
