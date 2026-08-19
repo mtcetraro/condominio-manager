@@ -193,6 +193,28 @@ public class Condominio{
         }
     }
 
+
+    public List<TabellaMillesimale> caricaTabelle(Connection conn){
+        List<TabellaMillesimale> tabelle = new ArrayList<>();
+        String query = "SELECT Tabella FROM TabellaMillesimale WHERE Condominio=?";
+        try(PreparedStatement pstmt = conn.prepareStatement(query)){
+            pstmt.setString(1, this.nome);
+            try(ResultSet rs = pstmt.executeQuery()){
+                while(rs.next()){
+                    String tabe = rs.getString("Tabella");
+
+                    TabellaMillesimale tabella = new TabellaMillesimale(tabe, this.nome);
+                    tabelle.add(tabella);
+                }
+                return tabelle;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            return tabelle;
+        }
+    }
+
+
     @Override
     public String toString() {
         // Ritorna il testo che vuoi vedere visivamente nella ListView
