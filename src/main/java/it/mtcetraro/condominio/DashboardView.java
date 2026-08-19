@@ -122,7 +122,21 @@ public class DashboardView extends BorderPane{
         costo.setOnMouseEntered(e -> costo.setStyle("-fx-font-size:13; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-color: #f4da68; -fx-text-fill: #ffffff"));
         costo.setOnMouseClicked(e -> mostraContenuto(contenutoSpesa(condominio)));
 
-        menuBar.getChildren().addAll(home, view, costo);
+        Button tabella = new Button("Tabelle Millesimali");
+        tabella.setStyle( "-fx-font-size:13; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-color: #675c2a; -fx-text-fill: #ffffff");
+        tabella.setPrefWidth(160);
+        tabella.setPrefHeight(35);
+        SVGPath tabellaIcona = new SVGPath();
+        tabellaIcona.setContent("M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 0 1-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0 1 12 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125M3.375 8.25c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m17.25-3.75h-7.5c-.621 0-1.125.504-1.125 1.125m8.625-1.125c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M12 10.875v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125M13.125 12h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125M20.625 12c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5M12 14.625v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 14.625c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m0 1.5v-1.5m0 0c0-.621.504-1.125 1.125-1.125m0 0h7.5");
+        //iconaHome.setStyle("-fx-text-fill: #ffffff;");
+        tabella.setGraphic(tabellaIcona);
+        tabella.setGraphicTextGap(15);
+        tabella.setAlignment(Pos.CENTER_LEFT);
+        tabella.setOnMouseExited(e -> tabella.setStyle("-fx-font-size:13; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-color: #675c2a; -fx-text-fill: #ffffff"));
+        tabella.setOnMouseEntered(e -> tabella.setStyle("-fx-font-size:13; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-color: #f4da68; -fx-text-fill: #ffffff"));
+        tabella.setOnMouseClicked(e -> mostraContenuto(contenutoTabella(condominio)));
+
+        menuBar.getChildren().addAll(home, view, costo, tabella);
 
         sidebar.getChildren().add(menuBar);
 
@@ -133,6 +147,190 @@ public class DashboardView extends BorderPane{
         areaContenuto.getChildren().clear();
 
         areaContenuto.getChildren().add(nuovoContenuto);
+    }
+
+    private Node contenutoTabella(Condominio condominio){
+        VBox contenuto = new VBox();
+        contenuto.setStyle("-fx-background-color: #bdbcbc; -fx-background-radius: 6px");
+        contenuto.setPrefWidth(900);
+        contenuto.setMinWidth(900);
+        contenuto.setMaxWidth(900);
+        contenuto.setPadding(new Insets(100, 60, 0, 100));
+
+        GridPane grid = new GridPane();
+        grid.setVgap(30);
+
+        Label title = new Label("Tabelle Millesimali: -- " + condominio.getNome());
+        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 20));
+        title.setStyle("-fx-text-fill: #1e293b;");
+
+        grid.add(title, 0, 0, 2, 1);
+
+        //TODO: Implementazione della lista di Tabelle Millesimali
+        ObservableList<Appartamento> observableListAppTab = FXCollections.observableArrayList();
+        ListView<Appartamento> listViewAppTab = new ListView<>(observableListAppTab);
+        listViewAppTab.setPrefSize(600, 500);
+        listViewAppTab.setStyle("-fx-cell-size: 30px; -fx-font-size: 15px");
+
+
+
+        grid.add(listViewAppTab, 0, 1, 3, 4);
+
+        Button crea = new Button("Crea Tab");
+        crea.setStyle("-fx-background-color: #1d4ed8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;");
+        //crea.setOnMouseClicked(e -> mostraContenuto(aggiungiSpesa(condominio)));
+        grid.add(crea, 3, 0, 1, 1);
+        grid.setHalignment(crea, HPos.RIGHT);
+
+        //caricaAppartamentoTabella(condominio, observableListAppTab);
+        ObservableList<TabellaMillesimale> observableListTab = FXCollections.observableArrayList();
+        ComboBox<TabellaMillesimale> comboBoxTab = new ComboBox<>(observableListTab);
+        comboBoxTab.setPromptText("Scegli Tabella:");
+        caricaTable(observableListTab, condominio);
+        grid.add(comboBoxTab, 3, 1,1 ,1);
+        grid.setHalignment(comboBoxTab, HPos.RIGHT);
+        Button aggiungi = new Button("Aggiungi");
+        aggiungi.setStyle("-fx-background-color: #1dd8a6; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;");
+        aggiungi.setOnMouseClicked(e -> mostraContenuto(scegliAppartamento(condominio)));
+        grid.add(aggiungi, 3, 2, 1, 1);
+        grid.setHalignment(aggiungi, HPos.RIGHT);
+        
+        contenuto.getChildren().add(grid);
+        return contenuto;
+    }
+
+    private Node scegliAppartamento(Condominio condominio){
+        VBox contenuto = new VBox();
+        contenuto.setStyle("-fx-background-color: #bdbcbc; -fx-background-radius: 6px");
+        contenuto.setPrefWidth(900);
+        contenuto.setMinWidth(900);
+        contenuto.setMaxWidth(900);
+        contenuto.setPadding(new Insets(100, 60, 0, 100));
+
+        GridPane grid = new GridPane();
+        grid.setVgap(30);
+
+        Label title = new Label("Appartamenti del Condominio: -- " + condominio.getNome());
+        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 17));
+        title.setStyle("-fx-text-fill: #1e293b;");
+        grid.add(title, 0, 0, 2, 1);
+
+        Label subtitle = new Label("Seleziona l'appartamento che vuoi aggiungere alla Tabella e poi clicca su ADD");
+        subtitle.setFont(Font.font("Segoe UI", FontWeight.SEMI_BOLD, 13));
+        subtitle.setStyle("-fx-text-fill: #384a67;");
+        grid.add(subtitle, 0, 1, 2, 1);
+
+        Button add = new Button("ADD");
+        add.setStyle("-fx-background-color: #d51dd8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;");
+        
+        grid.add(add, 3, 2, 1, 1);
+
+        ObservableList<Appartamento> lista_appartamenti_obs = FXCollections.observableArrayList();
+        ListView<Appartamento> lista_appartamenti = new ListView<>(lista_appartamenti_obs);
+        lista_appartamenti.setPrefSize(600, 500);
+        lista_appartamenti.setMaxWidth(600);
+        lista_appartamenti.setStyle("-fx-cell-size: 30px; -fx-font-size: 15px");
+        
+        caricaAppartamenti(condominio, lista_appartamenti_obs);
+
+        add.setOnMouseClicked(e->{
+            Appartamento appartamento_selezionato = lista_appartamenti.getSelectionModel().getSelectedItem();
+            if(appartamento_selezionato==null){
+                mostraMessaggio(AlertType.ERROR, "Errore nella selezione", "Non è stato selezionato nessun appartamento. Assicurarsi di selezionare un appartamento presente nella lista!");
+            }else{
+                mostraContenuto(formAppTab(appartamento_selezionato, condominio));
+                /*Home home = new Home();
+                boolean appartamento_aggiunto = home.aggiungiAppTab(appartamento_selezionato);
+                if(appartamento_aggiunto){
+                    mostraMessaggio(AlertType.CONFIRMATION, "Appartamento aggiunto", "L'appartamento selezionato è stato aggiunto alla Tabella scelta!");
+                }*/
+            }
+        });
+
+        
+
+        grid.add(lista_appartamenti, 0, 2, 3, 4);
+
+        contenuto.getChildren().add(grid);
+        return contenuto;
+    }
+
+    private Node formAppTab(Appartamento appartamento, Condominio condominio){
+        VBox area = new VBox();
+        area.setStyle("-fx-background-color: #bdbcbc; -fx-background-radius: 6px");
+        area.setPrefWidth(900);
+        area.setMinWidth(900);
+        area.setMaxWidth(900);
+        area.setPadding(new Insets(100, 100, 100, 100));
+
+        GridPane grid = new GridPane();
+        grid.setStyle(
+            "-fx-background-color: #ffffff; " +
+            "-fx-background-radius: 10px; " +
+            "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);"
+        );
+        grid.setPadding(new Insets(15, 30, 15, 30));
+        grid.setVgap(30);
+        grid.setHgap(20);
+
+        Label Titolo = new Label("Inserimento in tabella");
+        Titolo.setFont(Font.font("Segoe UI", FontWeight.BOLD, 20));
+        Titolo.setStyle("-fx-text-fill: #1e293b;");
+        grid.add(Titolo, 0, 0, 3, 1);
+
+        Label Tabella = new Label("Tabella:");
+        Tabella.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField tab = new TextField();
+        grid.add(Tabella, 0, 1, 1, 1);
+        grid.add(tab, 2, 1, 1, 1);
+
+        Label Millesimi = new Label("Millesimi:");
+        Millesimi.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField mille = new TextField();
+        mille.setPromptText("123, 89, 238 ...");
+        grid.add(Millesimi, 0, 2, 1, 1);
+        grid.add(mille, 2, 2, 1, 1);
+
+        Label Tassa = new Label("Tassa:");
+        Tassa.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField tass = new TextField();
+        tass.setPromptText("Inserire 0");
+        grid.add(Tassa, 0, 3, 1, 1);
+        grid.add(tass, 2, 3, 1, 1);
+
+        Button ritorna = new Button("Indietro");
+        ritorna.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px");
+        ritorna.setOnMouseExited(e -> ritorna.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
+        ritorna.setOnMouseEntered(e -> ritorna.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px"));
+        ritorna.setPrefSize(80, 40);
+        ritorna.setOnMouseClicked(e -> mostraContenuto(scegliAppartamento(condominio)));
+        grid.add(ritorna, 0, 4, 1, 1);
+        grid.setHalignment(ritorna, HPos.LEFT);
+
+        Button send = new Button("Invia");
+        send.setPrefSize(80, 40);
+        send.setStyle("-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;");
+        send.setOnMouseEntered(e -> send.setStyle(
+            "-fx-background-color: #1d4ed8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;"
+        ));
+        send.setOnMouseExited(e -> send.setStyle(
+            "-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;"
+        ));
+        //send.setOnMouseClicked(e->{});
+        grid.add(send, 2, 4, 1, 1);
+        grid.setHalignment(send, HPos.RIGHT);
+
+
+        area.getChildren().add(grid);
+
+        return area;
+    }
+
+    private void caricaTable(ObservableList<TabellaMillesimale> observableListTab, Condominio condominio){
+        Home home = new Home();
+        List<TabellaMillesimale> listaTab = home.getTab(condominio);
+        observableListTab.clear();
+        observableListTab.addAll(listaTab);
     }
 
     private Node contenutoSpesa(Condominio condominio){

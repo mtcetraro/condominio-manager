@@ -181,5 +181,15 @@ public class Home {
             return false;
         }
     }
+
+    public List<TabellaMillesimale> getTab(Condominio condominio){
+        try(Connection conn = DatabaseManager.getConnection()){
+            List<TabellaMillesimale> tabelle = condominio.caricaTabelle(conn);
+            return tabelle;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
 
