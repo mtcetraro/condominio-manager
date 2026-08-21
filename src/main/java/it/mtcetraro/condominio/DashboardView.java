@@ -192,6 +192,13 @@ public class DashboardView extends BorderPane{
             List<AppartamentoTabella> lista = home.showAppxTab(condominio, tabella_selected.getTabella());
             observableListAppTab.clear();
             observableListAppTab.addAll(lista);
+
+            int millesimo = home.getMillesimiTot(condominio, tabella_selected.getTabella());
+            Label counterMillessimi = new Label("Millesimi presenti: " + millesimo);
+            counterMillessimi.setFont(Font.font("Segoe UI", FontWeight.SEMI_BOLD, 14));
+            counterMillessimi.setStyle("-fx-text-fill: #384a67;");
+
+            grid.add(counterMillessimi, 3, 3, 1, 1);
         });
         grid.add(comboBoxTab, 3, 1,1 ,1);
         grid.setHalignment(comboBoxTab, HPos.RIGHT);

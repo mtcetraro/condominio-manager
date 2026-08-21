@@ -120,18 +120,43 @@ public class Appartamento{
     }
 
     public boolean inserisciTabella(Connection conn, String tabella, int millesimi){
-        String query = "INSERT INTO AppartamentoTabella(Condominio, Tabella, Appartamento, Millesimi, Tassa) VALUES (?, ?, ?, ?, ?)";
+        boolean check1000 = checkMillesimi(conn, tabella, millesimi);
+        if(check1000){
+            String query = "INSERT INTO AppartamentoTabella(Condominio, Tabella, Appartamento, Millesimi, Tassa) VALUES (?, ?, ?, ?, ?)";
+            try(PreparedStatement pstmt = conn.prepareStatement(query)){
+                pstmt.setString(1, this.condominio);
+                pstmt.setString(2, tabella);
+                pstmt.setString(3, this.interno);
+                pstmt.setInt(4, millesimi);
+                pstmt.setInt(5, 0);
+                int rows = pstmt.executeUpdate();
+                if(rows==1){
+                    return true;
+                }else{
+                    return false;
+                }
+            }catch(SQLException e){
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkMillesimi(Connection conn, String tabella, int millesimi){
+        String query = "SELECT SUM(Millesimi) AS Totale FROM AppartamentoTabella WHERE Condominio=? AND Tabella=?";
+        boolean ok = false;
         try(PreparedStatement pstmt = conn.prepareStatement(query)){
             pstmt.setString(1, this.condominio);
             pstmt.setString(2, tabella);
-            pstmt.setString(3, this.interno);
-            pstmt.setInt(4, millesimi);
-            pstmt.setInt(5, 0);
-            int rows = pstmt.executeUpdate();
-            if(rows==1){
-                return true;
-            }else{
-                return false;
+            try(ResultSet rs = pstmt.executeQuery()){
+                while(rs.next()){
+                    int totale = rs.getInt("Totale");
+                    if(totale + millesimi <= 1000){
+                        ok = true;
+                    }
+                }
+                return ok;
             }
         }catch(SQLException e){
             e.printStackTrace();

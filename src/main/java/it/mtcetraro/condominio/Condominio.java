@@ -238,6 +238,24 @@ public class Condominio{
         }
     }
 
+    public int getMillesimiPresenti(Connection conn, String tabella){
+        int tot = 0;
+        String query = "SELECT SUM(Millesimi) AS Totale FROM AppartamentoTabella WHERE Condominio=? AND Tabella=?";
+        try(PreparedStatement pstmt = conn.prepareStatement(query)){
+            pstmt.setString(1, this.nome);
+            pstmt.setString(2, tabella);
+            try(ResultSet rs = pstmt.executeQuery()){
+                while(rs.next()){
+                    tot = rs.getInt("Totale");
+                }
+                return tot;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            return tot;
+        }
+    }
+
     @Override
     public String toString() {
         // Ritorna il testo che vuoi vedere visivamente nella ListView

@@ -211,5 +211,15 @@ public class Home {
             return null;
         }
     }
+
+    public int getMillesimiTot(Condominio condominio, String tabella){
+        try(Connection conn = DatabaseManager.getConnection()){
+            int millesimi = condominio.getMillesimiPresenti(conn, tabella);
+            return millesimi;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return 0;
+        }
+    }
 }
 
