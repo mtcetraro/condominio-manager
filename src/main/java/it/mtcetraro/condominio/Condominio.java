@@ -214,6 +214,29 @@ public class Condominio{
         }
     }
 
+    public List<AppartamentoTabella> showAppTab(Connection conn, String tabella){
+        List<AppartamentoTabella> tabelle = new ArrayList<>();
+        String query = "SELECT Condominio, Tabella, Appartamento, Millesimi, Tassa FROM AppartamentoTabella WHERE Condominio=? AND Tabella=?";
+        try(PreparedStatement pstmt = conn.prepareStatement(query)){
+            pstmt.setString(1, this.nome);
+            pstmt.setString(2, tabella);
+            try(ResultSet rs = pstmt.executeQuery()){
+                while(rs.next()){
+                    String tabe = rs.getString("Tabella");
+                    String app = rs.getString("Appartamento");
+                    int mil = rs.getInt("Millesimi");
+                    Double tas = rs.getDouble("Tassa");
+
+                    AppartamentoTabella AppTab = new AppartamentoTabella(this.nome, tabe, app, mil, tas);
+                    tabelle.add(AppTab);
+                }
+                return tabelle;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            return tabelle;
+        }
+    }
 
     @Override
     public String toString() {

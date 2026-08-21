@@ -191,5 +191,25 @@ public class Home {
             return null;
         }
     }
+
+    public boolean inserimentoAppXTab(Appartamento appartamento, String tabella, int millesimi){
+        try(Connection conn = DatabaseManager.getConnection()){
+            boolean inserito = appartamento.inserisciTabella(conn, tabella, millesimi);
+            return inserito;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<AppartamentoTabella> showAppxTab(Condominio condominio, String tabella){
+        try(Connection conn = DatabaseManager.getConnection()){
+            List<AppartamentoTabella> lista = condominio.showAppTab(conn, tabella);
+            return lista;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
 

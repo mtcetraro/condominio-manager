@@ -119,6 +119,26 @@ public class Appartamento{
         }
     }
 
+    public boolean inserisciTabella(Connection conn, String tabella, int millesimi){
+        String query = "INSERT INTO AppartamentoTabella(Condominio, Tabella, Appartamento, Millesimi, Tassa) VALUES (?, ?, ?, ?, ?)";
+        try(PreparedStatement pstmt = conn.prepareStatement(query)){
+            pstmt.setString(1, this.condominio);
+            pstmt.setString(2, tabella);
+            pstmt.setString(3, this.interno);
+            pstmt.setInt(4, millesimi);
+            pstmt.setInt(5, 0);
+            int rows = pstmt.executeUpdate();
+            if(rows==1){
+                return true;
+            }else{
+                return false;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     @Override 
     public String toString(){
         return this.interno + " - " + this.proprietario;

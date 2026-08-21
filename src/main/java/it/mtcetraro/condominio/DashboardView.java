@@ -167,11 +167,10 @@ public class DashboardView extends BorderPane{
         grid.add(title, 0, 0, 2, 1);
 
         //TODO: Implementazione della lista di Tabelle Millesimali
-        ObservableList<Appartamento> observableListAppTab = FXCollections.observableArrayList();
-        ListView<Appartamento> listViewAppTab = new ListView<>(observableListAppTab);
+        ObservableList<AppartamentoTabella> observableListAppTab = FXCollections.observableArrayList();
+        ListView<AppartamentoTabella> listViewAppTab = new ListView<>(observableListAppTab);
         listViewAppTab.setPrefSize(600, 500);
         listViewAppTab.setStyle("-fx-cell-size: 30px; -fx-font-size: 15px");
-
 
 
         grid.add(listViewAppTab, 0, 1, 3, 4);
@@ -187,6 +186,13 @@ public class DashboardView extends BorderPane{
         ComboBox<TabellaMillesimale> comboBoxTab = new ComboBox<>(observableListTab);
         comboBoxTab.setPromptText("Scegli Tabella:");
         caricaTable(observableListTab, condominio);
+        comboBoxTab.setOnAction(e ->{
+            TabellaMillesimale tabella_selected = comboBoxTab.getValue();
+            Home home = new Home();
+            List<AppartamentoTabella> lista = home.showAppxTab(condominio, tabella_selected.getTabella());
+            observableListAppTab.clear();
+            observableListAppTab.addAll(lista);
+        });
         grid.add(comboBoxTab, 3, 1,1 ,1);
         grid.setHalignment(comboBoxTab, HPos.RIGHT);
         Button aggiungi = new Button("Aggiungi");
@@ -198,6 +204,7 @@ public class DashboardView extends BorderPane{
         contenuto.getChildren().add(grid);
         return contenuto;
     }
+
 
     private Node scegliAppartamento(Condominio condominio){
         VBox contenuto = new VBox();
@@ -239,11 +246,6 @@ public class DashboardView extends BorderPane{
                 mostraMessaggio(AlertType.ERROR, "Errore nella selezione", "Non è stato selezionato nessun appartamento. Assicurarsi di selezionare un appartamento presente nella lista!");
             }else{
                 mostraContenuto(formAppTab(appartamento_selezionato, condominio));
-                /*Home home = new Home();
-                boolean appartamento_aggiunto = home.aggiungiAppTab(appartamento_selezionato);
-                if(appartamento_aggiunto){
-                    mostraMessaggio(AlertType.CONFIRMATION, "Appartamento aggiunto", "L'appartamento selezionato è stato aggiunto alla Tabella scelta!");
-                }*/
             }
         });
 
@@ -291,12 +293,15 @@ public class DashboardView extends BorderPane{
         grid.add(Millesimi, 0, 2, 1, 1);
         grid.add(mille, 2, 2, 1, 1);
 
+        //CONCETTO DI TASSA INUTILE IN QUESTO CASO 
+        /* 
         Label Tassa = new Label("Tassa:");
         Tassa.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
         TextField tass = new TextField();
         tass.setPromptText("Inserire 0");
         grid.add(Tassa, 0, 3, 1, 1);
         grid.add(tass, 2, 3, 1, 1);
+        */
 
         Button ritorna = new Button("Indietro");
         ritorna.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 13px");
@@ -316,7 +321,19 @@ public class DashboardView extends BorderPane{
         send.setOnMouseExited(e -> send.setStyle(
             "-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;"
         ));
-        //send.setOnMouseClicked(e->{});
+        send.setOnMouseClicked(e->{
+            String tabella = tab.getText();
+            int millesimi = Integer.parseInt(mille.getText());
+
+            Home home = new Home();
+            boolean inserito_in_tabella = home.inserimentoAppXTab(appartamento, tabella, millesimi);
+            if(inserito_in_tabella){
+                mostraMessaggio(AlertType.CONFIRMATION, "Inserimento riuscito", "L'appartamento è stato inserito nella tabella richiesta!");
+                //mostraContenuto(contenutoTabella(condominio)); DA VALUTARE
+            }else{
+                mostraMessaggio(AlertType.ERROR, "Errore nell'inserimento'", "Non è stato possibile inserire l'appartamento con i dati inseriti. Riprovare!");
+            }
+        });
         grid.add(send, 2, 4, 1, 1);
         grid.setHalignment(send, HPos.RIGHT);
 
