@@ -17,6 +17,6 @@ public class AppartamentoTabella {
 
     @Override
     public String toString(){
-        return this.appartamento + " - " + this.millesimi + " - " + this.tassa + "€";
+        return this.appartamento + " -  " + "Millesimi: " + this.millesimi + " - " + this.tassa + "€";
     }
 }
