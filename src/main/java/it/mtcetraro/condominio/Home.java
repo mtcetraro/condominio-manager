@@ -221,5 +221,15 @@ public class Home {
             return 0;
         }
     }
+
+    public boolean creaTabella(Condominio condominio, String tabella){
+        try(Connection conn = DatabaseManager.getConnection()){
+            boolean inserito = condominio.creaTab(conn, tabella);
+            return inserito;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
 

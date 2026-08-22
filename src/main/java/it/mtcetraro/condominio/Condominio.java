@@ -256,6 +256,23 @@ public class Condominio{
         }
     }
 
+    public boolean creaTab(Connection conn, String tabella){
+        String query = "INSERT INTO TabellaMillesimale(Condominio, Tabella) VALUES (?, ?)";
+        try(PreparedStatement pstmt = conn.prepareStatement(query)){
+            pstmt.setString(1, this.nome);
+            pstmt.setString(2, tabella);
+            int rows = pstmt.executeUpdate();
+            if(rows==1){
+                return true;
+            }else{
+                return false;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     @Override
     public String toString() {
         // Ritorna il testo che vuoi vedere visivamente nella ListView
