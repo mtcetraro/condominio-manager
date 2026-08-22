@@ -177,7 +177,7 @@ public class DashboardView extends BorderPane{
 
         Button crea = new Button("Crea Tab");
         crea.setStyle("-fx-background-color: #1d4ed8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;");
-        //crea.setOnMouseClicked(e -> mostraContenuto(aggiungiSpesa(condominio)));
+        crea.setOnMouseClicked(e -> mostraContenuto(creaTab(condominio)));
         grid.add(crea, 3, 0, 1, 1);
         grid.setHalignment(crea, HPos.RIGHT);
 
@@ -212,6 +212,61 @@ public class DashboardView extends BorderPane{
         return contenuto;
     }
 
+    private Node creaTab(Condominio condominio){
+        VBox contenuto = new VBox();
+        contenuto.setStyle("-fx-background-color: #bdbcbc; -fx-background-radius: 6px");
+        contenuto.setPrefWidth(900);
+        contenuto.setMinWidth(900);
+        contenuto.setMaxWidth(900);
+        contenuto.setPadding(new Insets(100, 60, 0, 100));
+
+        GridPane grid = new GridPane();
+        grid.setVgap(30);
+
+        Label title = new Label("Crea tabella: -- " + condominio.getNome());
+        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 20));
+        title.setStyle("-fx-text-fill: #1e293b;");
+        grid.add(title, 0, 0, 3, 1);
+
+        Label Tabella = new Label("Tabella:");
+        Tabella.setStyle("-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 13px");
+        TextField tab = new TextField();
+        tab.setPrefWidth(70);
+        grid.add(Tabella, 0, 1, 1, 1);
+        grid.add(tab, 2, 1, 1, 1);
+        grid.setHalignment(tab, HPos.RIGHT);
+
+        Button add = new Button("Aggiungi");
+        add.setStyle("-fx-background-color: #d51dd8; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;");
+        add.setOnMouseClicked(e->{
+            String tabella = tab.getText();
+            Home home = new Home();
+            boolean inserito = home.creaTabella(condominio, tabella);
+            if(inserito){
+                mostraMessaggio(AlertType.CONFIRMATION, "Inserimento riuscito", "La tabella è stata creata correttamente!");
+                mostraContenuto(contenutoTabella(condominio));
+            }else{
+                mostraMessaggio(AlertType.ERROR, "Errore nell'inserimento'", "Errore nella creazione della Tabella Millesimale!");
+            }
+        });
+
+        
+        grid.add(add, 2, 2, 1, 1);
+        grid.setHalignment(add, HPos.RIGHT);
+
+        Button ritorna = new Button("Indietro");
+        ritorna.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold;  -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;");
+        ritorna.setOnMouseExited(e -> ritorna.setStyle("-fx-background-color: #6c1010; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;"));
+        ritorna.setOnMouseEntered(e -> ritorna.setStyle("-fx-background-color: #ff0000; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 10px; -fx-background-radius: 5px; -fx-cursor: hand;"));
+        ritorna.setPrefSize(80, 40);
+        ritorna.setOnMouseClicked(e -> mostraContenuto(contenutoTabella(condominio)));
+        grid.add(ritorna, 0, 2, 1, 1);
+        grid.setHalignment(ritorna, HPos.LEFT);
+
+        contenuto.getChildren().add(grid);
+
+        return contenuto;
+    }
 
     private Node scegliAppartamento(Condominio condominio){
         VBox contenuto = new VBox();
@@ -229,7 +284,7 @@ public class DashboardView extends BorderPane{
         title.setStyle("-fx-text-fill: #1e293b;");
         grid.add(title, 0, 0, 2, 1);
 
-        Label subtitle = new Label("Seleziona l'appartamento che vuoi aggiungere alla Tabella e poi clicca su ADD");
+        Label subtitle = new Label("Seleziona l'appartamento che vuoi aggiungere alla Tabella e clicca ADD");
         subtitle.setFont(Font.font("Segoe UI", FontWeight.SEMI_BOLD, 13));
         subtitle.setStyle("-fx-text-fill: #384a67;");
         grid.add(subtitle, 0, 1, 2, 1);
